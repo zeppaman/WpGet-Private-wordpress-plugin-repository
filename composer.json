@@ -1,0 +1,8 @@
+{
+    "require": {
+        "slim/slim": "^3.8",
+        "monolog/monolog": "^1.23",
+        "illuminate/database": "~5.1",
+        "doctrine/dbal": "^2.5"
+    }
+}
