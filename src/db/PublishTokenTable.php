@@ -16,6 +16,6 @@ class PublishTokenTable extends TableBase
     
     public function getTableName()
     {
-        return "publishtokens";
+        return "publishtoken";
     }
 }

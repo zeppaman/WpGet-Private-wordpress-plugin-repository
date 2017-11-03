@@ -12,6 +12,6 @@ return [
     'password' => 'wpget',
     'charset' => 'utf8',
     'collation' => 'utf8_unicode_ci',
-    'name' =>'main'
+    'name' =>'default'
   ]
 ];

@@ -3,9 +3,9 @@
 namespace WpGet;
 
 
-// ini_set('display_errors', 'On');
-// ini_set('html_errors', 0);
-// error_reporting(-1);
+ini_set('display_errors', 'On');
+ini_set('html_errors', 0);
+error_reporting(-1);
 
 
 
@@ -23,32 +23,34 @@ use \WpGet\db\RepositoryTable as RepositoryTable;
 use \WpGet\db\UsersTable as UsersTable;
 use \WpGet\db\PublishTokenTable as PublishTokenTable;
 use \WpGet\handler\ErrorHandler as ErrorHandler;
-
-
-require '../vendor/autoload.php';
-//model
-require 'models/User.php';  
-require 'models/Repository.php';  
-//controllers
-require 'controllers/DynamicController.php'; 
-require 'controllers/UserController.php';  
-require 'controllers/EntityController.php'; 
-require 'controllers/RepositoryController.php';
-//schema changes
-require 'db/TableBase.php';
-require 'db/RepositoryTable.php';
-require 'db/PublishTokenTable.php';
-require 'db/UsersTable.php';
-require 'db/UpdateManager.php';
- 
-require 'handlers/exceptions.php';
-
-
-$config =  include("../config/settings.php");
+use \WpGet\utils\DependencyManager as DependencyManager;
+use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 
 
 
+require '../../vendor/autoload.php';
+require '../../src/utils/DependencyManager.php';
 
+$appPath=realpath("../../");
+
+$dm= new DependencyManager($appPath);
+
+$dm->requireOnceFolders( array(
+  'src/models',
+  'src/controllers/base',
+  'src/controllers',
+  'src/db/base',
+  'src/db',
+  'src/handlers',
+  'src/utils',
+));
+
+$configPath=$dm->resolvePath('config/settings.php');
+$config =  include($configPath);
+
+
+
+// Slim configuration
 
 $app = new \Slim\App(['settings'=> $config]);
 
@@ -57,7 +59,7 @@ $container = $app->getContainer();
 
 $container['logger'] = function($c) {
     $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("../logs/app.log");
+    $file_handler = new \Monolog\Handler\StreamHandler("../../logs/app.log");
     $logger->pushHandler($file_handler);
     return $logger;
 };
@@ -90,24 +92,10 @@ $container['errorHandler'] = function ($c) {
   };
 };
   
+
+
   
-  // $um= new UpdateManager($container['settings']['db']);
-  // $um->addTable(new RepositoryTable());
-  // $um->addTable(new PublishTokenTable());
-  // $um->addTable(new UsersTable());
-  // echo "RUN";
-  // $um->run();
- 
-
-  $app->any('/repository/{action}[/{id}]', RepositoryController::class);
-  $app->any('/user/{action}[/{id}]', UserController::class);
- // $app->any('/user/item', \UserController::class);
-	
-
-// Define app routes
-$app->get('/hello/{name}', function ($request, $response, $args) {
-    return $response->write("Hello " . $args['name']);
-});
+  $app->any('/{action}', AuthenticationController::class);
 
 // Run app
 $app->run();

@@ -24,6 +24,7 @@ use \WpGet\db\UsersTable as UsersTable;
 use \WpGet\db\PublishTokenTable as PublishTokenTable;
 use \WpGet\handler\ErrorHandler as ErrorHandler;
 use \WpGet\utils\DependencyManager as DependencyManager;
+use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 
 
 
