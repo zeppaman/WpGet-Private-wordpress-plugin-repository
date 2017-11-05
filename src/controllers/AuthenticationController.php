@@ -19,21 +19,30 @@ use \WpGet\Utils\Util as Util;
         $username=$parsedBody["username"];
         
         $users=User::where('username', '=', $username)->get();
+        
         $user=User::find($users[0]->id);
 
-        
+        $hp=hash('sha512',$parsedBody["password"]);
+       
+        if($hp!=$user->password)
+        {
+            throw new \Exception("Password mismatch, failed login for   $username");
+        }
+       
+
         $token= Util::generateToken();
 
        $user->token=$token;
        
         $user->save();
 
-        $response->getBody()->write($user->toJson());
+       return $response->getBody()->write($user->toJson());
 
         }
         catch(\Exception $e)
         {
             print_r($e);
+            return $response=  $response->withStatus(403);    
         }
 
     }

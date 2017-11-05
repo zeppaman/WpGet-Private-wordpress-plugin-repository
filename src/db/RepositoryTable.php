@@ -8,7 +8,7 @@ class RepositoryTable extends TableBase
         return array(
             'name' =>'string',
             'description' =>'text',
-            'slug'=>'string',
+            'reposlug'=>'string',
         );
     }
 

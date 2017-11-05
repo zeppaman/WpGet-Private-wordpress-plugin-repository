@@ -17,7 +17,6 @@ use \WpGet\Controllers\UserController as UserController;
 use \WpGet\Controllers\DynamicController as DynamicController;
 use \WpGet\Controllers\EntityController as EntityController;
 use \WpGet\Controllers\RepositoryController as RepositoryController;
-use \WpGet\db\UpdateManager as UpdateManager;
 use \WpGet\db\TableBase as TableBase;
 use \WpGet\db\RepositoryTable as RepositoryTable;
 use \WpGet\db\UsersTable as UsersTable;
@@ -93,16 +92,11 @@ $container['errorHandler'] = function ($c) {
   
 
 
-  
-  // $um= new UpdateManager($container['settings']['db']);
-  // $um->addTable(new RepositoryTable());
-  // $um->addTable(new PublishTokenTable());
-  // $um->addTable(new UsersTable());
-  // echo "RUN";
-  // $um->run();
- 
+  $dm->upgradeDB($container['settings']['db']);
 
-  //Routing configuration
+
+
+  //Routing configuration 
 
   $app->any('/repository/{action}[/{id}]', RepositoryController::class);
   $app->any('/user/{action}[/{id}]', UserController::class);
@@ -110,9 +104,11 @@ $container['errorHandler'] = function ($c) {
 	
 
 // Define app routes
-$app->get('/hello/{name}', function ($request, $response, $args) {
-    return $response->write("Hello " . $args['name']);
-});
+// $app->get('/install', function ($request, $response, $args) {
+ 
+
+//   $response->body()->write('{status:"Ok"}');
+// });
 
 // Run app
 $app->run();

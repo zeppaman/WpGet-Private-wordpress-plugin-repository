@@ -84,14 +84,8 @@ $container['errorHandler'] = function ($c) {
 };
   
 
-
+$dm->upgradeDB($container['settings']['db']);
   
-  // $um= new UpdateManager($container['settings']['db']);
-  // $um->addTable(new RepositoryTable());
-  // $um->addTable(new PublishTokenTable());
-  // $um->addTable(new UsersTable());
-  // echo "RUN";
-  // $um->run();
  
 
   //Routing configuration

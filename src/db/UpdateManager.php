@@ -41,10 +41,10 @@ class UpdateManager
       
         foreach($this->tables as $tableDef)
         {
-            echo "table:".$tableDef->getTableName();
+           // echo "table:".$tableDef->getTableName();
             $tablename=$tableDef->getTableName();
             $fields=$tableDef->getAllColumns();
-            print_r( $fields);
+           // print_r( $fields);
         if (!$schema->hasTable($tablename)) 
         {
             

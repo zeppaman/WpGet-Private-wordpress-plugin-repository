@@ -14,9 +14,12 @@ use \WpGet\Models\User as User;
         $params = explode('/', $request->getAttribute('params'));
         $method = $request->getMethod();
         $action= $request->getAttribute('action');
-        $functioname=strtolower($method).strtolower($action);
+        $functioname=strtolower($method).$action;
   
-     
-        return $this->$functioname($request, $response, $args);
+        if( $method=="OPTIONS" &&  !isset($this->$functioname))
+        {
+            return $response;
+        }
+        return $response= $this->$functioname($request, $response, $args);
     }
 }

@@ -26,6 +26,10 @@ use \WpGet\handler\ErrorHandler as ErrorHandler;
 use \WpGet\utils\DependencyManager as DependencyManager;
 use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 
+use \Monolog\Logger as Logger;
+use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
+use \Tuupola\Middleware\Cors as Cors;
+
 
 
 require '../../vendor/autoload.php';
@@ -45,6 +49,10 @@ $dm->requireOnceFolders( array(
   'src/utils',
 ));
 
+$logger = new Logger("slim");
+$rotating = new RotatingFileHandler(__DIR__ . "slim.log", 0, Logger::DEBUG);
+$logger->pushHandler($rotating);
+
 $configPath=$dm->resolvePath('config/settings.php');
 $config =  include($configPath);
 
@@ -54,8 +62,33 @@ $config =  include($configPath);
 
 $app = new \Slim\App(['settings'=> $config]);
 
-
 $container = $app->getContainer();
+
+$config["cors"]["logger"]=  $logger;
+
+// $app->add(function($request, $response, $next) {
+//   $route = $request->getAttribute("route");
+
+//   $methods = [];
+
+//   if (!empty($route)) {
+//       $pattern = $route->getPattern();
+
+//       foreach ($this->router->getRoutes() as $route) {
+//           if ($pattern === $route->getPattern()) {
+//               $methods = array_merge_recursive($methods, $route->getMethods());
+//           }
+//       }
+//       //Methods holds all of the HTTP Verbs that a particular route handles.
+//   } else {
+//       $methods[] = $request->getMethod();
+//   }
+  
+//   $response = $next($request, $response);
+
+  
+//   return $response->withHeader("Access-Control-Allow-Methods", implode(",", $methods))->withHeader("Access-Control-Allow-Origin", "*");
+// });
 
 $container['logger'] = function($c) {
     $logger = new \Monolog\Logger('my_logger');
@@ -91,11 +124,14 @@ $container['errorHandler'] = function ($c) {
                            ->write('Something went wrong!');
   };
 };
-  
+
+
+$dm->upgradeDB($container['settings']['db']);
 
 
   
   $app->any('/{action}', AuthenticationController::class);
-
+  $app->add(new Cors( $config['cors'])); 
 // Run app
 $app->run();
+
