@@ -15,9 +15,10 @@ return [
     'name' =>'default'
   ],
   'cors'=>[
-    "origin" => ["http://localhost:4200"],
-    "methods" => ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    "headers.allow" => ["content-type","origin"],
-    "headers.expose" => []
-]
+    'origin'           => ['*'],
+    'exposeHeaders'    => '',
+    'maxAge'           => 120,
+    'allowCredentials' => true,
+    'allowHeaders'     => ['Accept', 'Accept-Language', 'Authorization', 'Content-Type','DNT','Keep-Alive','User-Agent','X-Requested-With','If-Modified-Since','Cache-Control','Origin'],
+  ]
 ];

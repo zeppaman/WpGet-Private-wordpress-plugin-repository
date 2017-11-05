@@ -28,8 +28,8 @@ use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 
 use \Monolog\Logger as Logger;
 use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
-use \Tuupola\Middleware\Cors as Cors;
-
+use \HavenShen\Slim\Cors\Guard as Guard;
+use \Bairwell\MiddlewareCors as MiddlewareCors;
 
 
 require '../../vendor/autoload.php';
@@ -49,9 +49,6 @@ $dm->requireOnceFolders( array(
   'src/utils',
 ));
 
-$logger = new Logger("slim");
-$rotating = new RotatingFileHandler(__DIR__ . "slim.log", 0, Logger::DEBUG);
-$logger->pushHandler($rotating);
 
 $configPath=$dm->resolvePath('config/settings.php');
 $config =  include($configPath);
@@ -64,37 +61,14 @@ $app = new \Slim\App(['settings'=> $config]);
 
 $container = $app->getContainer();
 
-$config["cors"]["logger"]=  $logger;
-
-// $app->add(function($request, $response, $next) {
-//   $route = $request->getAttribute("route");
-
-//   $methods = [];
-
-//   if (!empty($route)) {
-//       $pattern = $route->getPattern();
-
-//       foreach ($this->router->getRoutes() as $route) {
-//           if ($pattern === $route->getPattern()) {
-//               $methods = array_merge_recursive($methods, $route->getMethods());
-//           }
-//       }
-//       //Methods holds all of the HTTP Verbs that a particular route handles.
-//   } else {
-//       $methods[] = $request->getMethod();
-//   }
+ 
+$container['logger'] = function($c)
+{
+  $logger = new Logger('auth');
   
-//   $response = $next($request, $response);
-
-  
-//   return $response->withHeader("Access-Control-Allow-Methods", implode(",", $methods))->withHeader("Access-Control-Allow-Origin", "*");
-// });
-
-$container['logger'] = function($c) {
-    $logger = new \Monolog\Logger('my_logger');
-    $file_handler = new \Monolog\Handler\StreamHandler("../../logs/app.log");
-    $logger->pushHandler($file_handler);
-    return $logger;
+   $rotating = new RotatingFileHandler(__DIR__ . "../../../logs/auth.log", 0, Logger::DEBUG);
+   $logger->pushHandler($rotating);
+   return $logger;
 };
 
 
@@ -117,21 +91,29 @@ $container['db'] = function ($container) {
 $capsule = $container['db'];
 
 
-$container['errorHandler'] = function ($c) {
-  return function ($request, $response, $exception) use ($c) {
-      return $c['response']->withStatus(500)
-                           ->withHeader('Content-Type', 'text/html')
-                           ->write('Something went wrong!');
-  };
-};
+// $container['errorHandler'] = function ($c) {
+//   return function ($request, $response, $exception) use ($c) 
+//   {
+//     $logger=$c["logger"];
+//     $logger->
+//       return $c['response']->withStatus(500)
+//                            ->withHeader('Content-Type', 'text/html')
+//                            ->write('Something went wrong!');
+//   };
+// };
+
+$app->add(new MiddlewareCors( $container['settings']['cors'])); 
+
+
+
+
 
 
 $dm->upgradeDB($container['settings']['db']);
 
 
   
-  $app->any('/{action}', AuthenticationController::class);
-  $app->add(new Cors( $config['cors'])); 
+$app->any('/{action}', AuthenticationController::class);
 // Run app
 $app->run();
 
