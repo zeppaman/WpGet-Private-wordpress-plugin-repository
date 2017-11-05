@@ -21,7 +21,12 @@ use \WpGet\Utils\Util as Util;
         $username=$parsedBody["username"];
         
         $users=User::where('username', '=', $username)->get();
-        
+        if(!isset($users) || sizeof( $users)==0)
+        {
+            $this->logger->info("user not found");
+            $response=$response->withStatus(403); 
+            return $response;
+        }
         $user=User::find($users[0]->id);
         
         $this->logger->info("user found");
@@ -31,7 +36,8 @@ use \WpGet\Utils\Util as Util;
         if($hp!=$user->password)
         {
             $this->logger->info("password not matching");
-            throw new \Exception("Password mismatch, failed login for   $username");
+            $response= $response->withStatus(403); 
+            return $response;
         }
        
 
@@ -41,24 +47,18 @@ use \WpGet\Utils\Util as Util;
         $user->save();
         $this->logger->info("Access token updated");
 
-        $headers = $response->getHeaders();
-        foreach ($headers as $name => $values) {
-            $this->logger->info( "given : ".$name . ": " . implode(", ", $values));
-        }
+        
         
         $response->getBody()->write($user->toJson());
 
 
-        foreach ($headers as $name => $values) {
-            $this->logger->info( "given (2) : ".$name . ": " . implode(", ", $values));
-        }
 
         return $response;
         }
         catch(\Exception $e)
         {
             $this->logger->error((string)$exception);
-            return $response=  $response->withStatus(403);    
+            return  $response->withStatus(403);    
         }
 
     }
