@@ -20,5 +20,10 @@ return [
     'maxAge'           => 120,
     'allowCredentials' => true,
     'allowHeaders'     => ['Accept', 'Accept-Language', 'Authorization', 'Content-Type','DNT','Keep-Alive','User-Agent','X-Requested-With','If-Modified-Since','Cache-Control','Origin'],
+  ],
+  'appsettings'=>
+  [
+    'tempdir'=>"temp",
+    'storagedir'=>"storage"
   ]
 ];

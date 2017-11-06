@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use  \WpGet\Models;
+use WpGet\Controllers\ProtectedController;
 
- abstract class EntityController extends DynamicController
+ abstract class EntityController extends ProtectedController
 {
      abstract public function getTableDefinition();
      abstract  public function getModel();
