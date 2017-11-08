@@ -5,16 +5,19 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+
+import { environment } from '../../environments/environment';
+
 @Injectable()
 export class AuthenticationService 
 {
-    baseUrl:string="http://localhost:3000/web/auth/"
+   
     constructor(private http: Http, private messageService: MessageService ) { }
 
     login(username: string, password: string) {
         
         let user = {'username':username,"password":password};
-        return this.http.post(this.baseUrl+'Authorize',user)
+        return this.http.post(environment.apiHost +'auth/Authorize', user)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 console.log(response);

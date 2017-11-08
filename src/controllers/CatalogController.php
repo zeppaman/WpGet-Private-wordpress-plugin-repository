@@ -47,6 +47,7 @@ use \WpGet\Utils\Util as Util;
         {
             $reposlug="default";
         }
+
         if(!isset($name) || strlen($name)==0)
         {
             return $response=  $response->withStatus(500)->body()->write("name missing");
@@ -57,7 +58,7 @@ use \WpGet\Utils\Util as Util;
             return $response=  $response->withStatus(500)->body()->write("version missing");
         }
 
-        if (!preg_match("/(\d{1,})\.(\d{1,}).(\d{1,})", $versionStr,$matches)) {
+        if (!preg_match("/(\d{1,})\.(\d{1,}).(\d{1,})", $versionStr,$matches)) 
         {
             return $response=  $response->withStatus(500)->body()->write("version missing");
         }
@@ -106,6 +107,7 @@ use \WpGet\Utils\Util as Util;
         return $response->getBody()->write($pk->toJson());
 
     }
+    
 
     function getPackageAllVersions($request, $response, $args)
     {

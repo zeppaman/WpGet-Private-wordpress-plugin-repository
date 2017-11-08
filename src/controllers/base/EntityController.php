@@ -1,6 +1,11 @@
 <?php
 namespace WpGet\Controllers;
 
+// fix for dependency sequence limitation
+require_once "ProtectedController.php";
+
+
+
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \WpGet\Models\User as User;
@@ -19,7 +24,7 @@ use WpGet\Controllers\ProtectedController;
     function getAll($request, $response, $args) {   
         
         $td=$this->getTableDefinition();
-        $columns=$td->getFieldDefinition();
+        $columns=$td->getAllColumns();
         $model=$this->getModel();
         $columnNames=array_keys( $columns);
         $colString= implode(" ",$columnNames);
@@ -42,6 +47,11 @@ use WpGet\Controllers\ProtectedController;
         $model=$this->getModel();
         $data = $request->getParsedBody();
         $dev = new $model();
+        //This should be managed by client as in REST standard, btw this may may help to simplify calls
+        if(isset($data) && array_key_exists('id',$data))
+        {
+            return $response=$this->putItem($request, $response, $args);
+        }
 
         $this->map($data,$dev);
 
@@ -62,8 +72,9 @@ use WpGet\Controllers\ProtectedController;
     
      function putItem($request, $response, $args) {
         $model=$this->getModel();
-        $id = $args['id'];
         $data = $request->getParsedBody();
+        $id = (\array_key_exists('id',$args))? $args['id']:$data["id"];
+       
         $dev = $model::find($id);
 
         $this->map($data,$dev);
