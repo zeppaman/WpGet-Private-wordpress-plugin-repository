@@ -28,7 +28,6 @@ use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 
 use \Monolog\Logger as Logger;
 use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
-use \HavenShen\Slim\Cors\Guard as Guard;
 use \Bairwell\MiddlewareCors as MiddlewareCors;
 
 
