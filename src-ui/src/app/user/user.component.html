@@ -1,0 +1,32 @@
+<h1>Users</h1>
+<p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)" [paginator]="true" rows="15" [responsive]="true" >
+    
+    <p-column field="username" header="Username" [sortable]="true"></p-column>
+    <p-column field="created_at" header="Created On" [sortable]="true"></p-column>
+    <p-column field="updated_at" header="Updated On" [sortable]="true"></p-column>
+    <p-footer>
+      <div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
+    </p-footer>
+</p-dataTable>
+
+
+<p-dialog header="User Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="user">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="username">Username</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="username" [(ngModel)]="user.username" /></div>
+        </div>
+        <div class="ui-grid-row" *ngIf="user.isNew">
+            <div class="ui-grid-col-4"><label for="password">Password</label></div>
+            <div class="ui-grid-col-8"><input pPassword id="password"  type="password" [(ngModel)]="user.password" /></div>
+        </div>
+        
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-cancel" class=".ui-button-secondary" (click)="closeDialog()" label="Cancel"></button>
+            <button type="button" pButton icon="fa-close" class=".ui-button-danger" (click)="delete()" label="Delete"></button>
+            <button type="button" pButton icon="fa-check" class=".ui-button-success" (click)="save()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>

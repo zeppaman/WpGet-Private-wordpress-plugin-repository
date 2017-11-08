@@ -1,0 +1,113 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+
+body
+{
+    
+    font-family: "Roboto", "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1em;
+}
+
+#layout-topbar {
+   position: fixed;
+    display: block;
+    padding: 0;
+    height: 70px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* z-index: 9997; */
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,.3);
+    background-color: #186ba0;
+}
+
+
+
+p-sidebar .ui-menu
+{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+.ng-tns-c2-0.ng-trigger.ng-trigger-panelState.ui-sidebar.ui-widget.ui-widget-content.ui-shadow.ui-sidebar-active.ui-sidebar-left {
+    padding: 0px;
+    background: #eeeeee;
+}
+#layout-sidebar {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    height: 100%;
+    background-color: #fff;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.3);
+}
+#layout-sidebar .layout-menu {
+    overflow: auto;
+    height: calc(100% - 70px);
+}
+
+#layout-sidebar .layout-menu>a {
+    width: 100%;
+    height: 50px;
+    display: block;
+    padding: 15px 0 0 25px;
+    cursor: pointer;
+    border-top: 1px solid #e3e9ea;
+    box-sizing: border-box;
+    border-bottom: 1px solid #156090;
+}
+
+#layout-content {
+    margin-left: 300px;
+    padding-top: 70px;
+    background-color: #fff;
+}
+
+.topbar-menu, .topbar-menu>li, .topbar-menu>li>a {
+    display: inline-block;
+    height: 100%;
+}
+
+.topbar-menu {
+    list-style-type: none;
+    float: right;
+    margin: 0 60px 0 0;
+    padding: 0;
+}
+.topbar-menu>li>a:hover {
+    background-color: #4a4f52;
+}
+.topbar-menu>li>a {
+    text-decoration: none;
+    color: #fff;
+    transition: background-color .3s;
+    min-width: 120px;
+    text-align: center;
+    box-sizing: border-box;
+    line-height: 70px;
+}
+
+.login-box
+{
+    min-width:400px;
+    width: 300px ;
+    margin:10% auto;
+    display: block
+}
+
+.ui-form .ui-grid-row
+{
+    margin-bottom: 10px;
+}
+
+.login-box .ui-form
+{
+   
+    margin: 0px auto;
+    width: 227px;
+    display: block;
+}

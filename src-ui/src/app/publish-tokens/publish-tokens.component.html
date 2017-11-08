@@ -1,0 +1,69 @@
+<h1>Publish Tokens</h1>
+<p-dataTable [value]="items" selectionMode="single" [(selection)]="selectedItem" (onRowSelect)="onRowSelect($event)" [paginator]="true" rows="15" [responsive]="true" >
+    
+    <p-column field="reposlug" header="Slug" [sortable]="true"></p-column>
+    <p-column field="description" header="Description" [sortable]="true"></p-column>   
+    <p-column field="created_at" header="Created On" [sortable]="true"></p-column>
+    <p-column field="updated_at" header="Updated On" [sortable]="true"></p-column>
+    <p-footer>
+      <div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
+    </p-footer>
+</p-dataTable>
+
+
+<p-dialog header="Item Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true" width="600">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="item">
+
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="reposlug">Repository</label></div>
+            <div class="ui-grid-col-8">
+                <div class="ui-inputgroup">
+                    <div class="ui-inputgroup">
+                        <p-dropdown [options]="repos" [(ngModel)]="item.reposlug" [style]="{'width':'365px'}" required filter="true"></p-dropdown>
+                    </div>
+                </div>
+                </div>
+        </div>
+
+       
+
+        <div class="ui-grid-row" >
+            <div class="ui-grid-col-4"><label for="description">Description</label></div>
+            <div class="ui-grid-col-8"><div class="ui-inputgroup">
+              <textarea pInputTextarea id="description"   [(ngModel)]="item.description" ></textarea></div></div>
+          
+        </div>
+
+
+        <div class="ui-grid-row" >
+            <div class="ui-grid-col-4"><label for="writetoken">Write Token</label></div>
+            <div class="ui-grid-col-8">
+                <div class="ui-inputgroup">
+                  <input pInputTextarea id="writetoken"   [(ngModel)]="item.writetoken" disabled />
+                  <button pButton type="button" icon="fa-cogs" (click)="generateWriter()" class="ui-inputgroup-addon"></button>
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="ui-grid-row" >
+            <div class="ui-grid-col-4"><label for="readertoken">Read Token</label></div>
+            <div class="ui-grid-col-8">
+                <div class="ui-inputgroup">
+              <input pInputTextarea id="readertoken"   [(ngModel)]="item.readtoken"  disabled />
+              <button pButton type="button" icon="fa-cogs" (click)="generateReader()" class="ui-inputgroup-addon"></button>
+                </div>
+          </div>
+            
+        </div>
+        
+        
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-cancel" class=".ui-button-secondary" (click)="closeDialog()" label="Cancel"></button>
+            <button type="button" pButton icon="fa-close" class=".ui-button-danger" (click)="delete()" label="Delete"></button>
+            <button type="button" pButton icon="fa-check" class=".ui-button-success" (click)="save()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>

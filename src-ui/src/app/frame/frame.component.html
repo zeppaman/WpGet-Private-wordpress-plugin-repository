@@ -1,0 +1,44 @@
+
+
+<div class="layout-wrapper">
+    <!-- <p-toolbar id="layout-topbar">
+        <button type="text" (click)="display = true" pButton icon="fa-bars" ></button>
+    </p-toolbar> -->
+    <div id="layout-topbar">
+      <ul class="topbar-menu">
+        <li>        
+         <a routerLink="/logout" routerLinkActive="active" >LOGOUT</a>
+        </li>
+        
+      </ul>
+    </div>
+    <div id="layout-sidebar">
+  <div class="layout-menu">
+      <a   routerLink="/admin/user" routerLinkActive="active" ><i class="fa fa-user" aria-hidden="true"></i>&nbsp;  Users</a>
+      <a   routerLink="/admin/repository" routerLinkActive="active"><i class="fa fa-database" aria-hidden="true"></i> &nbsp;Repositories</a>
+      <a   routerLink="/admin/publishtokens" routerLinkActive="active"><i class="fa fa-key" aria-hidden="true"></i> &nbsp;Publish Tokens</a>
+      <a   routerLink="/admin/upload" routerLinkActive="active"><i class="fa fa-upload" aria-hidden="true"></i> &nbsp;Upload</a>
+  </div>
+</div>
+
+<p-sidebar [(visible)]="display" position="left" >
+  <div class="layout-menu">
+  
+ <div>
+   <h2>WpGet Logo Here</h2>
+ </div>
+    <p-menu [model]="items" ></p-menu>
+  </div>
+</p-sidebar>
+
+
+
+
+<p-growl [(value)]="msgs"></p-growl>
+
+<div class="main-content" id="layout-content">
+<router-outlet></router-outlet>
+</div>
+
+
+</div>

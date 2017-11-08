@@ -1,0 +1,37 @@
+<p-messages [(value)]="msgs"></p-messages>
+<p-panel  class="login-box">
+    <p-header>
+        <h1> Login </h1>
+    </p-header>
+    <!-- form -->
+    <div class="ui-grid ui-form" *ngIf="user">
+        
+                <div class="ui-grid-row">
+                    
+                    <div class="ui-grid-col-12">
+                            <div class="ui-inputgroup">
+                                    
+                        <input pInputText id="username" [(ngModel)]="user.username"  type="text" placeholder="Username" style="width: 200px"/>
+                        <span class="ui-inputgroup-addon"><i class="fa fa-user"></i></span>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="ui-grid-row">
+                        
+                        <div class="ui-grid-col-12">
+                                <div class="ui-inputgroup">
+                                        
+                            <input  type="password"  id="username" [(ngModel)]="user.password" placeholder="Password" style="width: 200px"/>
+                            <span class="ui-inputgroup-addon"><i class="fa fa-lock"></i></span>
+                                </div>
+                        </div>
+                    </div>
+    </div>
+
+    <p-footer>
+            <div class="ui-helper-clearfix">
+        <button pButton type="button" icon="fa-sign-in" iconPos="left" label="Login"  (click)="login()" style="display:block;float:right;width:160px;"></button>
+            </div>
+    </p-footer>
+</p-panel>
