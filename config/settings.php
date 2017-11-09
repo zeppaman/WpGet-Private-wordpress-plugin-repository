@@ -21,7 +21,7 @@ return [
     'allowCredentials' => true,
     'allowHeaders'     => ['Accept', 'Accept-Language', 'Authorization', 'Content-Type','DNT','Keep-Alive','User-Agent','X-Requested-With','If-Modified-Since','Cache-Control','Origin'],
   ],
-  'appsettings'=>
+  'packageManager'=>
   [
     'tempdir'=>"temp",
     'storagedir'=>"storage"
