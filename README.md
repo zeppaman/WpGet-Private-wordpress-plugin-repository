@@ -30,5 +30,14 @@ Here a siple diagram to explain how WpGet works.
  ## How to implement a WpGet compliant plugin
  
  ## More reference
- 
+
+## Wiki reference
+Usage
+* [deploy a package](deploy-wget-package)
+
+Dev: extend and contribute
+* [Setup local env](https://github.com/zeppaman/WpGet/wiki/Home/wpget-setup-local-env)
+* [API](https://github.com/zeppaman/WpGet/wiki/Home/wget-api-private)
+
+
  ## License
