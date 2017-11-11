@@ -1,5 +1,5 @@
 <?php
-namespace WpGet\Utils;
+namespace WpGet\utils;
 
 use \WpGet\db\Package;
 

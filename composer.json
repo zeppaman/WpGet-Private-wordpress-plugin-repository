@@ -3,8 +3,6 @@
         "slim/slim": "^3.8",
         "monolog/monolog": "^1.23",
         "illuminate/database": "~5.1",
-        "palanik/corsslim": "*",
-        "havenshen/slim-cors": "^1.0",
         "bairwell/middleware-cors": "^0.3.7"
     }
 }

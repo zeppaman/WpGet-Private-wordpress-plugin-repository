@@ -29,7 +29,7 @@ use \WpGet\Controllers\AuthenticationController as AuthenticationController;
 use \Monolog\Logger as Logger;
 use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
 use \Bairwell\MiddlewareCors as MiddlewareCors;
-use WpGet\Models\PublishToken;
+use \WpGet\Models\PublishToken;
 
 require '../../vendor/autoload.php';
 require '../../src/utils/DependencyManager.php';

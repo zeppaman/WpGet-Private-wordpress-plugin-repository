@@ -15,13 +15,14 @@ use \WpGet\Utils\PackageManager;
 {
     private $pm;
 
-    function __construct()
+    function __construct($container)
     {
         $this->pm= new PackageManager();
+        parent::__construct($container);
     }
     function getStatus($request, $response, $args)
     {
-        $charset = $app->request->headers->get('ACCEPT_CHARSET');
+        
         $response->getBody()->write( "OK");
     }
 

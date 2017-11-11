@@ -1,3 +1,4 @@
 vendor/*
 vendor/
 web/ui/
+logs/

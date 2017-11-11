@@ -14,6 +14,7 @@ use \Monolog\Logger as Logger;
     
        public function __construct( $container)
        {
+          
            $this->container=$container;
            $this->logger = $container["logger"];
        }
@@ -28,7 +29,7 @@ use \Monolog\Logger as Logger;
             $functioname=strtolower($method).$action;
     
 
-            $this->logger->info("Dynamic Route fired: $method $action  $functioname");
+           $this->logger->info("Dynamic Route fired: $method $action  $functioname");
             
             // if( $method=="OPTIONS" &&  !isset($this->$functioname))
             // {
