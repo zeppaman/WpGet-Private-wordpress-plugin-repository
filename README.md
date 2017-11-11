@@ -1,6 +1,21 @@
 # WpGet
 Wordpress private repository for plugins.
 
+**Provide updates for plugins**
+WpGet does that, keeping all packages and providing to the wordpress installation. Using token based authentication all process are kept secure.
+
+**Easy to setup**
+Setup is easy. Just a copy of the bundle to the server and few steps more. Plugin integration is very easy, just a class to add.
+
+**Api oriented**
+All core feature are exposed by API. This will allow you to integrate the delivery process with other tools in the company.
+
+**Ui to get control**
+A simple ui show what package are loaded and give you the power.
+
+**Low Server Requirements**
+Just a webserver with php and a database. For few data, using SQLite, neither database.
+
 ## Why we need a private repository
 
 Wordpress is the most used CMS in the world with the most important plugin system. It's easy for a developer to create and publish a new plugin into the public reposiory. But what if i had to create and mantain a private plugin? Im speaking about:
