@@ -28,11 +28,13 @@ Here a siple diagram to explain how WpGet works.
  
 *CURL EXAMPLE*
 ```bash
+curl  -H "Authorization: Bearer <ACCESS_TOKEN>" -F file=@filename http(s)://www.your-site.wpget/ui/catalog/Package?name=<packageName>&version=X.Y.Z
 ```
 
 
 *POWERSHELL EXAMPLE*
 ```powershell
+Invoke-RestMethod  -Header @{"Authorization" = "Bearer <ACCESS_TOKEN>"} -Method Post -InFile $filePath -ContentType "multipart/form-data" -Uri http(s)://www.your-site.wpget/ui/catalog/Package?name=<packageName>&version=X.Y.Z
 ```
 
 Any other needs or suggestion? [Please open a issue](https://github.com/zeppaman/WpGet/issues/new)
