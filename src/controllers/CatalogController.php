@@ -5,11 +5,12 @@ namespace WpGet\Controllers;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \WpGet\Controllers\ProtectedController as ProtectedController;
-use \WpGet\db\Package as Package;
+
 use \Illuminate\Database\Eloquent\Model as Model;
-use \WpGet\Models\PublishToken;
+use \WpGet\Models\PublishToken as PublishToken;
 use \WpGet\Utils\Util as Util;
 use \WpGet\Utils\PackageManager;
+use WpGet\Models\Package;
 
  class CatalogController extends ProtectedController
 {
@@ -17,7 +18,7 @@ use \WpGet\Utils\PackageManager;
 
     function __construct($container)
     {
-        $this->pm= new PackageManager();
+        $this->pm= new PackageManager($container);
         parent::__construct($container);
     }
     function getStatus($request, $response, $args)
@@ -31,70 +32,81 @@ use \WpGet\Utils\PackageManager;
     {
         try
         {
+            $this->logger->info("Post Package");
+            
             $user=$this->getServiceUser($request);
-            $pt= PublishToken::where('readtoken', '=', $user->token)->get();
+            $this->logger->debug( json_encode( $user));
+            $pt= PublishToken::where('writetoken', '=', $user->token)->get()[0];
+            $this->logger->debug( $pt->toJson());
 
             if(!isset($user) || !isset($pt) )
             {
+                $this->logger->error( "user not set or token not set");
                 return  $response->withStatus(403);
             }
 
             $data = $request->getParsedBody();
 
+            $this->logger->debug( print_r($data,TRUE));
 
-
-
-            $reposlug=$request->getQueryParam("reposlug");
-            $name=$request->getQueryParam("name");
-            $versionStr=$request->getQueryParam("version");
-
-            if($pt->reposlug!=$reposlug)
-            {
-                return  $response->withStatus(403);
-            }
+            $reposlug=$data["reposlug"];
+            $name=$data["name"];
+            $versionStr=$data["version"];
 
             if(!isset($reposlug) || strlen($reposlug)==0)
             {
                 $reposlug="default";
             }
+
+            $this->logger->error( "Parsed input  reposlug:$reposlug  name:$name versionStr:$versionStr");
+
+            
+            if($pt->reposlug!=$reposlug)
+            {
+                $this->logger->error( "reposlug not matching");
+                return $response=  $response->withStatus(500)->body()->write("name missing");
+            }
+
+           
             if(!isset($name) || strlen($name)==0)
             {
+                $this->logger->error( "name missing");
                 return $response=  $response->withStatus(500)->body()->write("name missing");
             }
 
             if(!isset($versionStr) || strlen($versionStr)==0)
             {
+                $this->logger->error("version missing");
                 return $response=  $response->withStatus(500)->body()->write("version missing");
             }
 
-            $files = $request->getUploadedFiles();
-            if(isset($files) && sizeof($files)>0)
-            {
-                throw new \Exception("Package already present.");
-            }
-            $uploadedFile=$files[0];
+            
+            $uploadedFile = $request->getUploadedFiles();
+            $this->logger->info("FILE:".print_r($uploadedFile ,TRUE));
+            
 
             
-            //TODO: OPEN PACKAGE AND READ METADATA
-
+           
+            $this->logger->info(" //TODO: OPEN PACKAGE AND READ METADATA");
             $pk= new Package();
+            $this->logger->info("filling package data");
             $pk->name=$name;
             $pk->reposlug=$reposlug;
-            $pk->version=$version;
-            // $pk->minor=$minor;
-            // $pk->major=$major;
-            // $pk->build=$build;
-            $pk->setVersionFromString($version);
-            $pk->relativepath=$repoPath;
-
-            $pk->save();
+           
+            $pk->setVersionFromString($versionStr);
+            
+            $this->logger->debug( "saving package:".$pk->toJSon());
+            
+           
 
        
-            $pm->addPackage($pm,uploadedFile);
+            $pk=$this->pm->addPackage($pk,$uploadedFile);
+           
         }
         catch(\Exception $e)
         {
-            return $response=  $response->withStatus(500)->body()->write($e->getMessage());
+            $this->logger->error($e);
+            return $response=  $response->withStatus(500)->getBody()->write($e->getMessage());
         }
 
        

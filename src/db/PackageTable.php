@@ -1,7 +1,7 @@
 <?php
 namespace WpGet\db;
 
-class Package extends TableBase
+class PackageTable extends TableBase
 {
     public function  getFieldDefinition()
     { 
@@ -9,9 +9,9 @@ class Package extends TableBase
             'reposlug' =>'string',
             'name' =>'string',
             'description'=>'string',
-            'major'=>'int',
-            'minor'=>'int',
-            'build' =>'string',
+            'major'=>'integer',
+            'minor'=>'integer',
+            'build' =>'integer',
             'version' =>'string',            
             'relativepath' =>'string'
         );

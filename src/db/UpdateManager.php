@@ -23,7 +23,7 @@ class UpdateManager
        // echo "added table ".$table->getTableName();
         array_push($this->tables,$table);
        //print_r( $this->tables);
-        return;
+        return $this;
     }
 
     function run()

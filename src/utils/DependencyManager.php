@@ -5,6 +5,7 @@ use \WpGet\db\UpdateManager as UpdateManager;
 use \WpGet\db\TableBase as TableBase;
 use \WpGet\db\RepositoryTable as RepositoryTable;
 use \WpGet\db\UsersTable as UsersTable;
+use \WpGet\db\PackageTable as PackageTable;
 use \WpGet\db\PublishTokenTable as PublishTokenTable;
 use \WpGet\Models\User as User;
 
@@ -52,6 +53,7 @@ class DependencyManager
         $um->addTable(new RepositoryTable());
         $um->addTable(new PublishTokenTable());
         $um->addTable(new UsersTable());
+        $um->addTable(new PackageTable());
         $um->run();
 
         $userCount=User::all()->count();

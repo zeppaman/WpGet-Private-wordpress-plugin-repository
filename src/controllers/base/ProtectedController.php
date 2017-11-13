@@ -44,6 +44,7 @@ class ProtectedController extends DynamicController
          $ui= new UserInfo();
          $ui->roles=array("admin");
          $ui->user= json_decode( $user->toJson());
+         $ui->token=$token;
          return $ui;
     }
 
@@ -70,6 +71,7 @@ class ProtectedController extends DynamicController
          }
 
          $ui= new UserInfo();
+         $ui->token=$token;
          $ui->roles=$roles;
          return $ui;
     }

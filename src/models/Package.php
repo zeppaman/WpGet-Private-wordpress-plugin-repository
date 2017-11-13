@@ -6,12 +6,13 @@ class Package extends \Illuminate\Database\Eloquent\Model {
 
   public function setVersionFromString($versionStr)
   {
-      if (!preg_match("/(\d{1,})\.(\d{1,}).(\d{1,})", $versionStr,$matches)) 
+      if (!preg_match("/(\d{1,})\.(\d{1,}).(\d{1,})/", $versionStr,$matches)) 
           {
-              return $response=  $response->withStatus(500)->body()->write("version missing");
+             throw new \Exception("unable to parse version".$versionStr);
           }
-          $this->major=$matches[0];
-          $this->minor=$matches[1];
-          $this->build=$matches[2];
+          $this->version=$versionStr;
+          $this->major=$matches[1];
+          $this->minor=$matches[2];
+          $this->build=$matches[3];
   }
 }

@@ -4,6 +4,7 @@ class UserInfo
 {
     public $roles;
     public $user;
+    public $token;
 
     public function hasRole($role)
     {
