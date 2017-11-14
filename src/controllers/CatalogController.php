@@ -84,7 +84,7 @@ use WpGet\Models\Package;
             $uploadedFile = $request->getUploadedFiles();
             $this->logger->info("FILE:".print_r($uploadedFile ,TRUE));
             
-
+            $this->logger->info("RP".realpath("../../"));
             
            
             $this->logger->info(" //TODO: OPEN PACKAGE AND READ METADATA");
