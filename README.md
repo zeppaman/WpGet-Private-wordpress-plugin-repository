@@ -43,7 +43,12 @@ Here a siple diagram to explain how WpGet works.
  
 *CURL EXAMPLE*
 ```bash
-curl  -H "Authorization: Bearer <ACCESS_TOKEN>" -F file=@filename http(s)://www.your-site.wpget/ui/catalog/Package?name=<packageName>&version=X.Y.Z
+curl  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  -F "name=package" \
+  -F "version=1.1.1" \
+  -F "reposlug=default" \
+  -F "file=@/C/temp/wgettest/package_v1.0.0.zip" \
+  http://localhost:3000/web/catalog/Package
 ```
 
 
