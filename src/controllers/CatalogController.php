@@ -16,6 +16,8 @@ use WpGet\Models\Package;
 {
     private $pm;
 
+    
+
     function __construct($container)
     {
         $this->pm= new PackageManager($container);
@@ -84,7 +86,7 @@ use WpGet\Models\Package;
             $uploadedFile = $request->getUploadedFiles();
             $this->logger->info("FILE:".print_r($uploadedFile ,TRUE));
             
-            $this->logger->info("RP".realpath("../../"));
+           
             
            
             $this->logger->info(" //TODO: OPEN PACKAGE AND READ METADATA");
@@ -119,6 +121,9 @@ use WpGet\Models\Package;
     {
         try
         {
+            $data = $request->getQueryParams();        
+            $this->logger->debug("DATA:".print_r($data,TRUE));
+
             $user=$this->getServiceUser($request);
             $pt= PublishToken::where('readtoken', '=', $user->token)->get();
 
@@ -127,19 +132,14 @@ use WpGet\Models\Package;
                 return  $response->withStatus(403);
             }
 
-            $data = $request->getParsedBody();
-
-
-
-
             $reposlug=$data["reposlug"];
             $name=$data["name"];
-            $versionStr=$data["version"];
+           // $versionStr=$data["version"];
 
-            if($pt->reposlug!=$reposlug)
-            {
-                return  $response->withStatus(403);
-            }
+            // if($pt->reposlug!=$reposlug)
+            // {
+            //     return  $response->withStatus(403);
+            // }
 
             if(!isset($reposlug) || strlen($reposlug)==0)
             {
@@ -147,23 +147,23 @@ use WpGet\Models\Package;
             }
             if(!isset($name) || strlen($name)==0)
             {
-                return $response=  $response->withStatus(500)->body()->write("name missing");
+                return $response=  $response->withStatus(500)->getBody()->write("name missing");
             }
 
             
-            $packages=$pm->getPackages($name,$reposlug);
+            $packages=$this->pm->getPackages($name,$reposlug);
             if(!isset($packages) )
             {
-                return $response=  $response->withStatus(500)->body()->write("package not found or duplicateds");
+                return $response=  $response->withStatus(500)->getBody()->write("package not found or duplicateds");
             }
 
             
-            return  $response->body()->write($packages->toJson());
+            return  $response->getBody()->write($packages->toJson());
 
         }
         catch(\Exception $e)
         {
-            return $response=  $response->withStatus(500)->body()->write($e->getMessage());
+            return $response=  $response->withStatus(500)->getBody()->write($e->getMessage());
         }
     }
 
@@ -172,6 +172,8 @@ use WpGet\Models\Package;
 
         try
         {
+            $data = $request->getQueryParams();
+            $this->logger->debug("DATA:".print_r($data,TRUE));
 
             $user=$this->getServiceUser($request);
             $pt= PublishToken::where('readtoken', '=', $user->token)->get();
@@ -181,19 +183,22 @@ use WpGet\Models\Package;
                 return  $response->withStatus(403);
             }
 
-            $data = $request->getParsedBody();
-
+          
 
 
 
             $reposlug=$data["reposlug"];
             $name=$data["name"];
-            $versionStr=$data["version"];
-
-            if($pt->reposlug!=$reposlug)
+            $versionStr="";
+            if(array_key_exists('version',$data))
             {
-                return  $response->withStatus(403);
+                $versionStr=$data["version"];
             }
+
+            // if($pt->reposlug!=$reposlug)
+            // {
+            //     return  $response->withStatus(403);
+            // }
 
             if(!isset($reposlug) || strlen($reposlug)==0)
             {
@@ -201,23 +206,25 @@ use WpGet\Models\Package;
             }
             if(!isset($name) || strlen($name)==0)
             {
-                return $response=  $response->withStatus(500)->body()->write("name missing");
+                return $response=  $response->withStatus(500)->getBody()->write("name missing");
             }
 
             if(!isset($versionStr) || strlen($versionStr)==0)
             {
-                return $response=  $response->withStatus(500)->body()->write("version missing");
+               $package= $this->pm->getLastestVersion($name);
             }
+            else
+            {
 
-            $package=$pm->getPackages($versionStr,$name,$reposlug);
-
+                $package=$this->pm->getPackage($versionStr,$name,$reposlug);
+            }
             
-             return  $response->body()->write($package->toJson());
+             return  $response->getBody()->write($package->toJson());
 
         }
         catch(\Exception $e)
         {
-            return $response=  $response->withStatus(500)->body()->write($e->getMessage());
+            return $response=  $response->withStatus(500)->getBody()->write($e->getMessage());
         }
     }
 

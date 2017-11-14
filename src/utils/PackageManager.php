@@ -79,18 +79,31 @@ class PackageManager
         return $pk;
     }
 
-    public function getPackages($versionStr, $name,$reposlug)
+    public function getPackage($versionStr, $name,$reposlug)
     {
+
         return Package::where('version', '=', $versionStr)
         ->where('name', '=', $name)
+        ->where('reposlug', '=', $reposlug)
+        ->get()[0];
+        
+    }
+
+    public function getPackages( $name,$reposlug)
+    {
+        
+        return Package::where('name', '=', $name)
         ->where('reposlug', '=', $reposlug)
         ->get();
     }
 
-    public function getPackage( $name,$reposlug)
+    public function getLastestVersion($name)
     {
-        return Package::where('name', '=', $name)
-        ->where('reposlug', '=', $reposlug)
-        ->get();
+       return Package::where('name','=',$name) 
+        ->orderBy('major', 'desc')
+        ->orderBy('minor', 'desc')
+        ->orderBy('build', 'desc')
+        ->take(1)
+        ->get()[0];
     }
 }
