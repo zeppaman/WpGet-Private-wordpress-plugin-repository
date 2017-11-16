@@ -44,7 +44,7 @@ export class RepositoryComponent implements OnInit, OnChanges {
     {
       this.item.reposlug= (this.item.reposlug+ "000000000") ;
     }
-    this.item.reposlug=this.item.reposlug.substring(0, 10)
+    this.item.reposlug=this.item.reposlug.substring(0, 7)
   }
      reload()
      {

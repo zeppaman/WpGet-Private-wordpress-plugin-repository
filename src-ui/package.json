@@ -26,6 +26,7 @@
     "angular2-fontawesome": "^0.9.3",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
+    "ng2-slugify": "^0.1.0",
     "primeng": "^4.3.0",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
