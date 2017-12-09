@@ -42,7 +42,7 @@ export class RepositoryService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.get('/assets/users.json')
+    return this.http.delete(environment.apiHost+'api/repository/Item/'+item.id)
     .toPromise()
     .then(res => <any[]> res.json().rows)
     .then(data => { 
