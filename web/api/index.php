@@ -65,7 +65,7 @@ $container['logger'] = function($c)
 {
   $logger = new Logger('api');
   
-   $rotating = new RotatingFileHandler(__DIR__ . "../../../logs/api.log", 0, Logger::DEBUG);
+   $rotating = new RotatingFileHandler(__DIR__ . "/../../logs/api.log", 0, Logger::DEBUG);
    $logger->pushHandler($rotating);
    return $logger;
 };
