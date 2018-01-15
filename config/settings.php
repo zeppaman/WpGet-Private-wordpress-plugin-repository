@@ -3,6 +3,9 @@ return [
   'determineRouteBeforeAppMiddleware' => false,
   'outputBuffering' => false,
   'displayErrorDetails' => true,
+  'ui' =>[
+    'url'=>'http://localhost:4200/',
+  ],
   'db' => [
     'driver' => 'mysql',
     'host' => 'localhost',

@@ -6,6 +6,9 @@ import { UserComponent } from '../user/user.component';
 import { FrameComponent } from './frame.component';
 import { RepositoryComponent } from '../repository/repository.component';
 import { PublishTokensComponent } from '../publish-tokens/publish-tokens.component';
+import { UploadPackageComponent } from '../upload-package/upload-package.component';
+import { PackagesComponent } from '../packages/packages.component';
+import {FileUploadModule} from 'primeng/primeng';
 
 
 export const routes: Routes = [
@@ -17,7 +20,9 @@ export const routes: Routes = [
     { path: 'home',  pathMatch: 'full', component: HomeComponent},
     { path: 'user', component: UserComponent },
     { path: 'repository', component: RepositoryComponent },
-    { path: 'publishtokens', component: PublishTokensComponent }
+    { path: 'publishtokens', component: PublishTokensComponent },
+    { path: 'upload', component: UploadPackageComponent },
+    { path: 'packages', component: PackagesComponent }
   ]
 }
 ];

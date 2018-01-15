@@ -26,13 +26,32 @@ class ProtectedController extends DynamicController
     public function getUiUser($request)
     {
         $tokenHeader= $request->getHeaderLine('Authorization');
+        $token=null;
+        $data = $request->getParsedBody();
+
+        //to support header and data
+        if(!isset( $tokenHeader) || strlen($tokenHeader)<5)
+        {
+            $token= $data["token"];
+        }
+        else
+        {
+           
+            //separate token
+            if(strpos($tokenHeader,"Bearer"))
+            {
+                $token=substr($tokenHeader,strlen("Bearer "));
+            }
+        }
         
-         if(!isset( $tokenHeader) || strlen($tokenHeader)<5)
-         {
-             return null;
-         }
+        if(!isset( $token) || strlen($token)<5)
+        {
+            return null;
+        }
+        
+
          
-         $token=substr($tokenHeader,strlen("Bearer "));
+         
 
          $users=User::where('token', '=', $token)->get();
          if( sizeof( $users) !=1)
@@ -45,6 +64,8 @@ class ProtectedController extends DynamicController
          $ui->roles=array("admin");
          $ui->user= json_decode( $user->toJson());
          $ui->token=$token;
+         $ui->type="UI";
+
          return $ui;
     }
 
@@ -73,6 +94,7 @@ class ProtectedController extends DynamicController
          $ui= new UserInfo();
          $ui->token=$token;
          $ui->roles=$roles;
+         $ui->type="SERVICE";
          return $ui;
     }
 

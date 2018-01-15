@@ -43,6 +43,7 @@ import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { UploadPackageComponent } from './upload-package/upload-package.component';
 import { PackagesComponent } from './packages/packages.component';
 import {PanelModule} from 'primeng/primeng';
+import {FileUploadModule} from 'primeng/primeng';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,9 @@ import {PanelModule} from 'primeng/primeng';
     BreadcrumbModule,
     InputTextareaModule,
     DropdownModule,
-    PanelModule
+    PanelModule,
+    FileUploadModule
+
   ],
   providers: [AuthenticationService, AlertService,  AuthGuard, UserService, MessageService, RepositoryService, PublishTokenService],
   bootstrap: [AppComponent]

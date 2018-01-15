@@ -12,18 +12,26 @@ import { environment } from '../../environments/environment';
 export class AuthenticationService 
 {
    
-    constructor(private http: Http, private messageService: MessageService ) { }
-
+    constructor(private http: Http, private messageService: MessageService ) { 
+        
+    }
+     user:any= {};
+    currentUser() {
+    
+      this.user = JSON.parse( localStorage.getItem('currentUser'));
+      return this.user;
+    }
     login(username: string, password: string) {
         
-        let user = {'username':username,"password":password};
-        return this.http.post(environment.apiHost +'auth/Authorize', user)
+         let inputuser = {'username' : username, 'password' : password};
+        return this.http.post(environment.apiHost +'auth/Authorize', inputuser)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 console.log(response);
-                if (user) {
+                if (response) {
                     // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('currentUser', JSON.stringify(response.json()));
+                    console.log( JSON.stringify(response.json()));
                 }
             })
             .catch((err:Response) => {
@@ -32,12 +40,13 @@ export class AuthenticationService
                 summary: 'Login Error', 
                 detail: 'Error during login. Check password and username'  + JSON.stringify(err.json().error) });
                 return Observable.throw(new Error(details));
-             });    
+             });
                 
     }
 
     logout() {
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
+        this.user={};
     }
 }

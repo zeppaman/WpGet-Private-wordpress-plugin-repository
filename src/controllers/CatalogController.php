@@ -15,12 +15,13 @@ use WpGet\Models\Package;
  class CatalogController extends ProtectedController
 {
     private $pm;
+    private $uisettings;
 
-    
-
-    function __construct($container)
+     function  __construct($container)
     {
         $this->pm= new PackageManager($container);
+        $this->uisettings=$container['settings']['ui'];
+        
         parent::__construct($container);
     }
     function getStatus($request, $response, $args)
@@ -35,20 +36,9 @@ use WpGet\Models\Package;
         try
         {
             $this->logger->info("Post Package");
-            
-            $user=$this->getServiceUser($request);
-            $this->logger->debug( json_encode( $user));
-            $pt= PublishToken::where('writetoken', '=', $user->token)->get()[0];
-            $this->logger->debug( $pt->toJson());
-
-            if(!isset($user) || !isset($pt) )
-            {
-                $this->logger->error( "user not set or token not set");
-                return  $response->withStatus(403);
-            }
 
             $data = $request->getParsedBody();
-
+            
             $this->logger->debug( print_r($data,TRUE));
 
             $reposlug=$data["reposlug"];
@@ -60,20 +50,62 @@ use WpGet\Models\Package;
                 $reposlug="default";
             }
 
-            $this->logger->error( "Parsed input  reposlug:$reposlug  name:$name versionStr:$versionStr");
+            $this->logger->info( "Parsed input  reposlug:$reposlug  name:$name versionStr:$versionStr");
+
+            // user control
+            
+            $user=$this->getUser($request);
+           
+            if($user->type=="SERVICE")
+            {
+                $this->logger->debug( json_encode( $user));
+                $pt= PublishToken::where('writetoken', '=', $user->token)->get()[0];
+                $this->logger->debug( $pt->toJson());
+
+                if(!isset($user) || !isset($pt) )
+                {
+                    $this->logger->error( "user not set or token not set");
+                    return  $response->withStatus(403);
+                }
+
+                if($pt->reposlug!=$reposlug)
+                {
+                    $this->logger->error( "reposlug not matching ");
+                    return $response=  $response->withStatus(500)->body()->write("name missing");
+                }
+
+            }
+            else if($user->type=="UI")
+            {
+                  //TODO: in future check if user has control over this repo
+            }
+            else
+            {
+              throw new \Exception("Unable to use user type undefined");
+            }
+
+           
+
+          
 
             
-            if($pt->reposlug!=$reposlug)
-            {
-                $this->logger->error( "reposlug not matching");
-                return $response=  $response->withStatus(500)->body()->write("name missing");
-            }
+           
 
            
             if(!isset($name) || strlen($name)==0)
             {
                 $this->logger->error( "name missing");
                 return $response=  $response->withStatus(500)->body()->write("name missing");
+            }
+
+           
+
+            if($versionStr=="next")
+            {
+              
+               $lastversion= $this->pm->getLastestVersion($name,$reposlug);
+                if($lastversion==null) $versionStr="1.0.0";
+                $versionStr=($lastversion->major+1).".".$lastversion->minor.".".$lastversion->build;
             }
 
             if(!isset($versionStr) || strlen($versionStr)==0)
@@ -112,6 +144,10 @@ use WpGet\Models\Package;
         }
 
        
+        if($user->type=="UI")
+        {
+            return $response->withStatus(302)->withHeader('Location', $this->uisettings["url"].'admin/packages');
+        }
 
         return $response->getBody()->write($pk->toJson());
 

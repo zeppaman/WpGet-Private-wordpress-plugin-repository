@@ -97,13 +97,19 @@ class PackageManager
         ->get();
     }
 
-    public function getLastestVersion($name)
+    public function getLastestVersion($name,$reposlug)
     {
-       return Package::where('name','=',$name) 
+       $result= Package::where('name','=',$name) 
+        ->where('reposlug', '=', $reposlug)
         ->orderBy('major', 'desc')
         ->orderBy('minor', 'desc')
         ->orderBy('build', 'desc')
         ->take(1)
-        ->get()[0];
+        ->get();
+        if(isset($result)&& sizeof($result)>0)
+        {
+            return $result[0];
+        }
+        return null;
     }
 }

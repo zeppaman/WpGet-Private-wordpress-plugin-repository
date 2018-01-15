@@ -1,3 +1,20 @@
-<p>
-  upload-package works!
-</p>
+<h1>Upload Package</h1>
+
+<form  (submit)='onSubmit(form)' ngNoForm name="uplad" method="POST" enctype="multipart/form-data" attr.action="{{uploadSettings.url}}" >
+
+  File to upload:<input type="file" accept="application/zip,application/x-zip,application/x-zip-compressed" name="file" /> <br/>
+  Repository:  <p-dropdown [options]="repos" [style]="{'width':'365px'}" required filter="true" name="reposlug">
+    </p-dropdown><br/>
+  
+  Package name: <input type="text"  name="name" pInputText /><br/>
+  Version: <input type="text"  name="version" value="next" /><br/>
+
+  <input type="hidden"  name="token" value="{{uploadSettings.token}}" /><br/>
+  
+
+  
+  <input type="submit"  value="Upload" />
+
+</form>
+
+

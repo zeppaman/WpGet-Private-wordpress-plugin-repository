@@ -20,19 +20,7 @@ export class FrameComponent  {
   items: MenuItem[];
   
       ngOnInit() {
-          this.items = [
-            {label:"Admin",
-            items: [
-                      {label: 'Users', icon: 'fa-user',  routerLink: "/admin/users"},
-                      {label: 'Stores', icon: 'fa-download' , routerLink: "/admin/stores"},
-                      {label: 'Tokens', icon: 'fa-refresh', routerLink: "/admin/Tokens"},
-            ]},
-            {
-              label:"User",
-            items: [
-                      {label: 'Logout', icon: 'fa-refresh', routerLink: "/logout"}
-                  ]
-                }]
+       
       }
 }
 
