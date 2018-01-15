@@ -44,6 +44,7 @@ import { UploadPackageComponent } from './upload-package/upload-package.componen
 import { PackagesComponent } from './packages/packages.component';
 import {PanelModule} from 'primeng/primeng';
 import {FileUploadModule} from 'primeng/primeng';
+import { PackageService } from './_service/package.service';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,14 @@ import {FileUploadModule} from 'primeng/primeng';
     FileUploadModule
 
   ],
-  providers: [AuthenticationService, AlertService,  AuthGuard, UserService, MessageService, RepositoryService, PublishTokenService],
+  providers: [AuthenticationService, 
+    AlertService,  
+    AuthGuard, 
+    UserService, 
+    MessageService, 
+    RepositoryService, 
+    PublishTokenService,
+    PackageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

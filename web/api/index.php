@@ -30,6 +30,7 @@ use \Monolog\Logger as Logger;
 use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
 use \Bairwell\MiddlewareCors as MiddlewareCors;
 use \WpGet\Models\PublishToken;
+use WpGet\Controllers\PackageController;
 
 require '../../vendor/autoload.php';
 require '../../src/utils/DependencyManager.php';
@@ -118,6 +119,7 @@ $capsule = $container['db'];
   $app->any('/user/{action}[/{id}]', UserController::class);
   
   $app->any('/publishtoken/{action}[/{id}]', PublishTokenController::class);
+  $app->any('/package/{action}[/{id}]', PackageController::class);
  // $app->any('/user/item', \UserController::class);
 	
 

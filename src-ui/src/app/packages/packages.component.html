@@ -1,3 +1,21 @@
-<p>
-  packages works!
-</p>
+<h1>Packages</h1>
+
+Repository: <p-dropdown [options]="repos" [style]="{'width':'365px'}" required [(ngModel)]="search.reposlug"  name="reposlug"></p-dropdown>
+Name: <input type="text"  name="name"  [(ngModel)]="search.name"/>
+<button pButton type="button" icon="fa-search" iconPos="left" label="Search" (click)="doSearch();"></button><br/>
+<br>
+
+
+
+<p-dataTable [value]="items" selectionMode="single" [(selection)]="selectedItem" [paginator]="true" rows="15" [responsive]="true" >
+    
+    <p-column field="reposlug" header="Repo" [sortable]="true"></p-column>
+    <p-column field="name" header="Name" [sortable]="true"></p-column>
+    <p-column field="version" header="Version" [sortable]="true"></p-column>
+    <!-- <p-column field="description" header="Description" [sortable]="true"></p-column>    -->
+    <p-column field="created_at" header="Created On" [sortable]="true"></p-column>
+    <p-column field="updated_at" header="Updated On" [sortable]="true"></p-column>
+    <p-footer>
+      <div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div>
+    </p-footer>
+</p-dataTable>

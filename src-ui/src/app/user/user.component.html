@@ -1,5 +1,6 @@
 <h1>Users</h1>
-<p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)" [paginator]="true" rows="15" [responsive]="true" >
+<p-dataTable [value]="users" selectionMode="single" [(selection)]="selectedUser" (onRowSelect)="onRowSelect($event)"
+ [paginator]="true" rows="15" [responsive]="true" >
     
     <p-column field="username" header="Username" [sortable]="true"></p-column>
     <p-column field="created_at" header="Created On" [sortable]="true"></p-column>
