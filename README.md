@@ -1,5 +1,6 @@
 # WpGet
 Wordpress private repository for plugins.
+[![CircleCI](https://circleci.com/gh/zeppaman/WpGet.svg?style=svg)](https://circleci.com/gh/zeppaman/WpGet)
 
 **Provide updates for plugins**
 WpGet does that, keeping all packages and providing to the wordpress installation. Using token based authentication all process are kept secure.
