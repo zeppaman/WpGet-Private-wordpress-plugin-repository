@@ -8,9 +8,6 @@ jobs:
     docker:
       - image: circleci/php:7.1.5-browsers
       
-
- 
-      - 
     working_directory: ~/repo
 
     steps:
