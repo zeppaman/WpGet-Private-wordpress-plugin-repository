@@ -8,6 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/php:7.1.5-browsers
+      - image: circleci/node:4.8.2
       
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -18,7 +19,9 @@ jobs:
 
     steps:
       - checkout
-
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
       # Download and cache dependencies
       - restore_cache:
           keys:
