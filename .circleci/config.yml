@@ -38,7 +38,7 @@ jobs:
           name: Creating  Artifacts
           command: |
             mkdir /tmp/artifacts;
-            zip *.* > /tmp/artifacts/deploy.zip;
+            zip -r /tmp/artifacts/web.zip .;
             
       - store_artifacts:
           path: /tmp/artifacts
