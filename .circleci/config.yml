@@ -6,21 +6,16 @@ version: 2
 jobs:
   build:
     docker:
-   
-      # specify the version you desire here
       - image: circleci/php:7.1.5-browsers
       
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mysql:9.4
+
  
       - 
     working_directory: ~/repo
 
     steps:
       - checkout
-      - run: sudo apt-get update; sudo apt-get install gnu-smalltalk
+     
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -33,6 +28,7 @@ jobs:
       - run: php composer.phar self-update
       - run: sudo mv composer.phar /usr/local/bin/composer
       - run: composer install -n --prefer-dist
+       - run: sudo apt-get update; sudo apt-get install gnu-smalltalk
 
       - save_cache:
           paths:
