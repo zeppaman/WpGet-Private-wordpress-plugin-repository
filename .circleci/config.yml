@@ -27,10 +27,12 @@ jobs:
       - run: composer install -n --prefer-dist
       - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
       - run: sudo apt-get install -y nodejs
-      - run: cd src-ui
-      - run: npm install
-      - run: npm run ng build
-      - run: cd .. 
+      - run: 
+          name: Angular Build
+          command: |
+            cd src-ui;
+            npm install;
+            npm run ng build; 
       
       - run:
           name: Creating  Artifacts
