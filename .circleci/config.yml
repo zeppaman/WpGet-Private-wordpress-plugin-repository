@@ -29,7 +29,7 @@ jobs:
       - run: sudo apt-get install -y nodejs
       - run: cd src-ui
       - run: npm install
-      - run: ng build
+      - run: npm run ng build
       - run: cd .. 
       
       - run:
