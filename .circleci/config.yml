@@ -25,8 +25,9 @@ jobs:
       - run: php composer.phar self-update
       - run: sudo mv composer.phar /usr/local/bin/composer
       - run: composer install -n --prefer-dist
-      - run: sudo apt-get update; sudo apt-get install gnu-smalltalk
-
+      - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+      - run: sudo apt-get install -y nodejs
+      
       - save_cache:
           paths:
             - ./vendor
