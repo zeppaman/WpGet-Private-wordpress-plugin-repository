@@ -28,7 +28,7 @@ jobs:
       - run: php composer.phar self-update
       - run: sudo mv composer.phar /usr/local/bin/composer
       - run: composer install -n --prefer-dist
-       - run: sudo apt-get update; sudo apt-get install gnu-smalltalk
+      - run: sudo apt-get update; sudo apt-get install gnu-smalltalk
 
       - save_cache:
           paths:
