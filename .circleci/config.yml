@@ -27,6 +27,19 @@ jobs:
       - run: composer install -n --prefer-dist
       - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
       - run: sudo apt-get install -y nodejs
+      - run: cd src-ui
+      - run: npm install
+      - run: ng build
+      - run: cd .. 
+      
+      - run:
+          name: Creating  Artifacts
+          command: |
+            mkdir /tmp/artifacts;
+            zip *.* > /tmp/artifacts/deploy.zip;
+            
+      - store_artifacts:
+          path: /tmp/artifacts
       
       - save_cache:
           paths:
