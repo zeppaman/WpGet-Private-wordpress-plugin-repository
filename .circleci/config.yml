@@ -34,7 +34,7 @@ jobs:
             npm install;
             npm run ng build
             cd ..
-            rm src-ui; 
+            rm -r src-ui; 
       
       - run:
           name: Creating  Artifacts
