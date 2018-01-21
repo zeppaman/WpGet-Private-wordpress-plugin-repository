@@ -87,7 +87,7 @@ use \WpGet\db\PackageTable as PackageTable;
              $pk->save();
  
         
-             $pm->addPackage($pm,uploadedFile);
+             $pm->addPackage($pm,$uploadedFile);
          }
          catch(\Exception $e)
          {

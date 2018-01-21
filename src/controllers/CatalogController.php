@@ -83,14 +83,6 @@ use WpGet\Models\Package;
             {
               throw new \Exception("Unable to use user type undefined");
             }
-
-           
-
-          
-
-            
-           
-
            
             if(!isset($name) || strlen($name)==0)
             {
@@ -104,8 +96,14 @@ use WpGet\Models\Package;
             {
               
                $lastversion= $this->pm->getLastestVersion($name,$reposlug);
-                if($lastversion==null) $versionStr="1.0.0";
-                $versionStr=($lastversion->major+1).".".$lastversion->minor.".".$lastversion->build;
+                if($lastversion==null) 
+                {
+                    $versionStr="1.0.0";             
+                }
+                else
+                {
+                    $versionStr=($lastversion->major+1).".".$lastversion->minor.".".$lastversion->build;
+                }
             }
 
             if(!isset($versionStr) || strlen($versionStr)==0)
