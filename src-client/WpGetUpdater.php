@@ -95,10 +95,11 @@ class WpGetUpdater {
     
     public function get_remote_version()
     {
-		$request = wp_remote_post( $this->wpget_api_url, array( 'body' => array( 'action' => 'version' ) ) );
+		$request = wp_remote_post( $this->wpget_api_url, array( 'body' => array( 'action' => 'info' ) ) );
         if ( ! is_wp_error( $request ) || wp_remote_retrieve_response_code( $request ) === 200 )
         {
-			return $request['body'];
+            $body =  unserialize( base64_decode( $request['body'] ) );
+			return $body['version'];
 		}
 
 		return false;
