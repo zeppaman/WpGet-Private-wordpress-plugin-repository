@@ -1,4 +1,4 @@
-# WpGet
+# Private Wordpress plugin repository
 Wordpress private repository for plugins.
 [![CircleCI](https://circleci.com/gh/zeppaman/WpGet.svg?style=svg)](https://circleci.com/gh/zeppaman/WpGet)
 
