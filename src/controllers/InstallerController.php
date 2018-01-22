@@ -24,7 +24,8 @@ use \WpGet\Utils\PackageManager;
            $this->logger = $container["logger"];
            $this->pm= new PackageManager($container);
            $this->writablePaths= array(
-               realpath("../../")."/web/ui/assets" =>" during installation, can be changed after that.",
+               realpath("../../")."/web/ui/assets" =>" during installation, must be changed after that.",
+               realpath("../../")."/conifg" =>" during installation, must be changed after that.",
                $this->pm->tempDir =>"temporary forlder have to be writable",
                $this->pm->storageDir =>"temporary forlder have to be writable",
            );
