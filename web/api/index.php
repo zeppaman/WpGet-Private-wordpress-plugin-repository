@@ -31,6 +31,7 @@ use \Monolog\Handler\RotatingFileHandler as RotatingFileHandler;
 use \Bairwell\MiddlewareCors as MiddlewareCors;
 use \WpGet\Models\PublishToken;
 use WpGet\Controllers\PackageController;
+use WpGet\Controllers\InstallerController;
 
 require '../../vendor/autoload.php';
 require '../../src/utils/DependencyManager.php';
@@ -89,28 +90,9 @@ $container['db'] = function ($container) {
 
 $capsule = $container['db'];
 
-
-// $container['errorHandler'] = function ($c) {
-//   return function ($request, $response, $exception) use ($c) {
-//       return $c['response']->withStatus(500)
-//                            ->withHeader('Content-Type', 'text/html')
-//                            ->write('Something went wrong!');
-//   };
-// };
+$app->add(new MiddlewareCors( $container['settings']['cors'])); 
   
 
-
-  $dm->upgradeDB($container['settings']['db']);
-
-
-  $app->add(new MiddlewareCors( $container['settings']['cors'])); 
-  
-  
-  
-  
-  
-  
-  $dm->upgradeDB($container['settings']['db']);
   
 
   //Routing configuration 
@@ -120,15 +102,14 @@ $capsule = $container['db'];
   
   $app->any('/publishtoken/{action}[/{id}]', PublishTokenController::class);
   $app->any('/package/{action}[/{id}]', PackageController::class);
- // $app->any('/user/item', \UserController::class);
-	
 
-// Define app routes
-// $app->get('/install', function ($request, $response, $args) {
- 
-
-//   $response->body()->write('{status:"Ok"}');
-// });
+  $configPath=$dm->resolvePath('config/installed.lock');
+  
+  if(!file_exists($configPath))
+  {
+    $container['dm']=$dm;
+    $app->get('/install',InstallerController::class );
+  }
 
 // Run app
 $app->run();

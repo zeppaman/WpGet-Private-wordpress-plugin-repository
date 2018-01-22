@@ -10,6 +10,8 @@ class PackageManager
     public $container;
     public $logger;
     public $replacements;
+    public $tempDir;
+    public $storageDir;
 
     public function __construct($container)
     {
@@ -18,7 +20,14 @@ class PackageManager
 
         $this->replacements=array(); 
         $this->replacements["root"]=realpath("../../");
+
+         $this->tempDir=$this->container["settings"]["packageManager"]["tempdir"];
+         $this->storageDir=$this->container["settings"]["packageManager"]["storagedir"];
+
+
         
+        $this->doReplacements(  $this->tempDir);
+        $this->doReplacements(  $this->storageDir);
     }
 
     function  doReplacements( &$dir)
@@ -42,14 +51,8 @@ class PackageManager
     {
       
 
-        $tempdir=$this->container["settings"]["packageManager"]["tempdir"];
-        $storagedir=$this->container["settings"]["packageManager"]["storagedir"];
-
-
-        
-        $this->doReplacements( $tempdir);
-        $this->doReplacements( $storagedir);
-        $this->logger->debug("Replaced path".$tempdir." ". $storagedir);
+       
+        $this->logger->debug("Replaced path".$this->tempDir." ". $this->$storageDir);
         $packages=Package::where('version', '=', $pk->version)
         ->where('name', '=', $pk->name)
         ->where('reposlug', '=', $pk->reposlug)
@@ -66,8 +69,8 @@ class PackageManager
         $this->logger->info("Repo path:".$repoPath);
         $pk->relativepath=$repoPath;
         $tmpPath=Util::generateRandomString(10).".zip";
-        $tmpFullPath=$tempdir . DIRECTORY_SEPARATOR . $tmpPath;
-        $repoFullPath=$storagedir . DIRECTORY_SEPARATOR . $repoPath;
+        $tmpFullPath=$this->tempDir . DIRECTORY_SEPARATOR . $tmpPath;
+        $repoFullPath=$this->$storageDir . DIRECTORY_SEPARATOR . $repoPath;
 
         $this->ensureDirForPath($tmpFullPath);
         $this->ensureDirForPath($repoFullPath);
