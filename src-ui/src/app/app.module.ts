@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 
 import { AppComponent } from './app.component';
 
@@ -45,6 +45,11 @@ import { PackagesComponent } from './packages/packages.component';
 import {PanelModule} from 'primeng/primeng';
 import {FileUploadModule} from 'primeng/primeng';
 import { PackageService } from './_service/package.service';
+import { ConfigurationService } from './_service/configuration.service';
+import { Http } from '@angular/http/src/http';
+import { APP_BASE_HREF } from '@angular/common';
+
+
 
 @NgModule({
   declarations: [
@@ -93,7 +98,22 @@ import { PackageService } from './_service/package.service';
     MessageService, 
     RepositoryService, 
     PublishTokenService,
-    PackageService],
+    PackageService,
+    ConfigurationService,
+    {
+        provide: APP_INITIALIZER,
+        useFactory: (config: ConfigurationService) => () => config.load(),
+        deps: [ConfigurationService,HttpModule],
+        multi: true
+    },,
+    { provide: APP_BASE_HREF, 
+      useFactory: (config: ConfigurationService) => {
+        return config.baseHref;
+      },
+      deps: [ConfigurationService,HttpModule],
+     },
+      
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

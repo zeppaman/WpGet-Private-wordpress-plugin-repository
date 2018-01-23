@@ -3,18 +3,19 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { environment } from '../../environments/environment';
+
 import { Observable } from 'rxjs/Observable';
+import { ConfigurationService } from './configuration.service';
 
 
 @Injectable()
 export class PublishTokenService {
 
 
-  constructor(private http: Http, private messageService: MessageService) { }
+  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
-    return this.http.get(environment.apiHost+ 'api/publishtoken/All')
+    return this.http.get(this.config.apiHost+ 'api/publishtoken/All')
     .toPromise()
     .then(res => {
       console.log(res.json());
@@ -25,7 +26,7 @@ export class PublishTokenService {
 
   save(item:any)  {
     console.log(item);
-    return this.http.post(environment.apiHost+'api/publishtoken/Item', item)
+    return this.http.post(this.config.apiHost+'api/publishtoken/Item', item)
     .catch((err: Response) => {
         this.messageService.add({severity: 'error', 
         summary: 'Publish Token Save Erorr', 
@@ -42,7 +43,7 @@ export class PublishTokenService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.delete(environment.apiHost+'api/publishtoken/Item/'+item.id)
+    return this.http.delete(this.config.apiHost+'api/publishtoken/Item/'+item.id)
     .toPromise()
     .then(res => <any[]> res.json().rows)
     .then(data => { 

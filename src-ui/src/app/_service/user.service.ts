@@ -3,20 +3,20 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { environment } from '../../environments/environment';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 import { Observable } from 'rxjs/Observable';
+import { ConfigurationService } from './configuration.service';
 
 @Injectable()
 export class UserService {
 
 
-  constructor(private http: Http, private messageService: MessageService) { }
+  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
-    return this.http.get(environment.apiHost+ 'api/user/All')
+    return this.http.get(this.config.apiHost+ 'api/user/All')
         .toPromise()
         .then(res => {
           console.log(res.json());
@@ -27,7 +27,7 @@ export class UserService {
 
   save(item: any)  {
       console.log(item);
-      return this.http.post(environment.apiHost+'api/user/Item', item)
+      return this.http.post(this.config.apiHost+'api/user/Item', item)
       .catch((err: Response) => {
           this.messageService.add({severity: 'error', 
           summary: 'User Save Erorr', 
@@ -44,7 +44,7 @@ export class UserService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.delete(environment.apiHost+'api/user/Item/'+item.id)
+    return this.http.delete(this.config.apiHost+'api/user/Item/'+item.id)
     .toPromise()
     .then(res => <any[]> res.json().rows)
     .then(data => { 

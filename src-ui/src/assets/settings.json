@@ -1,0 +1,6 @@
+{
+    "installed":false,
+    "test":"valorized",
+    "apiHost":"http://localhost:3000/web/",
+    "baseHref":"/"
+}

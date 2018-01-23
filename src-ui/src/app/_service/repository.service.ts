@@ -3,18 +3,19 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { environment } from '../../environments/environment';
+
 import { Observable } from 'rxjs/Observable';
+import { ConfigurationService } from './configuration.service';
 
 
 @Injectable()
 export class RepositoryService {
 
 
-  constructor(private http: Http, private messageService: MessageService) { }
+  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
-    return this.http.get(environment.apiHost+ 'api/repository/All')
+    return this.http.get(this.config.apiHost+ 'api/repository/All')
     .toPromise()
     .then(res => {
       console.log(res.json());
@@ -25,7 +26,7 @@ export class RepositoryService {
 
   save(item:any)  {
     console.log(item);
-    return this.http.post(environment.apiHost+'api/repository/Item', item)
+    return this.http.post(this.config.apiHost+'api/repository/Item', item)
     .catch((err: Response) => {
         this.messageService.add({severity: 'error', 
         summary: 'Repository Save Erorr', 
@@ -42,7 +43,7 @@ export class RepositoryService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.delete(environment.apiHost+'api/repository/Item/'+item.id)
+    return this.http.delete(this.config.apiHost+'api/repository/Item/'+item.id)
     .toPromise()
     .then(res => <any[]> res.json().rows)
     .then(data => { 
