@@ -107,6 +107,7 @@ $app->add(new MiddlewareCors( $container['settings']['cors']));
   
   if(!file_exists($configPath))
   {
+   
     $container['dm']=$dm;
     $app->get('/install',InstallerController::class );
   }
