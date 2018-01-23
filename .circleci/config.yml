@@ -19,31 +19,7 @@ jobs:
           - v1-dependencies-{{ checksum "composer.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-      - run: php composer-setup.php
-      - run: php -r "unlink('composer-setup.php');"
-      - run: php composer.phar self-update
-      - run: sudo mv composer.phar /usr/local/bin/composer
-      - run: composer install -n --prefer-dist
-      - run: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-      - run: sudo apt-get install -y nodejs
-      - run: 
-          name: Angular Build
-          command: |
-            cd src-ui;
-            npm install;
-            npm run ng build;
-            cd ..;
-            rm -rf src-ui;
-            rm -rf .circleci;
-            rm -rf .git;
-            rm -rf .vscode; 
-      
-      - run:
-          name: Creating  Artifacts
-          command: |
-            mkdir /tmp/artifacts;
-            zip -r /tmp/artifacts/web.zip .;
+      - run: build.sh
             
       - store_artifacts:
           path: /tmp/artifacts
