@@ -20,7 +20,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       - run: chmod -R 777 *
-      - run: .circleci/build.sh
+      - run: sh .circleci/build.sh
             
       - store_artifacts:
           path: /tmp/artifacts
