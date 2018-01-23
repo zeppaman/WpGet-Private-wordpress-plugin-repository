@@ -19,3 +19,7 @@ rm -rf src-ui;
 rm -rf .circleci;
 rm -rf .git;
 rm -rf .vscode; 
+
+#build artifact
+mkdir /tmp/artifacts;
+zip -r /tmp/artifacts/web.zip .
