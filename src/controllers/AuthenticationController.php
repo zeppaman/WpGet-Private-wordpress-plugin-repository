@@ -68,7 +68,7 @@ use \WpGet\Utils\Util as Util;
     {
         try
         {
-            $user=$this->getUser($request);
+            $user=$this->getUser();
             
             if(!isset($user) ) 
             {

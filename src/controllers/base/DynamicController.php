@@ -11,6 +11,7 @@ use \Monolog\Logger as Logger;
 {
     protected $logger;
     protected $container;
+    protected $request;
     
        public function __construct( $container)
        {
@@ -23,6 +24,7 @@ use \Monolog\Logger as Logger;
     {   
         try
         {
+            $this->request=$request;
             $params = explode('/', $request->getAttribute('params'));
             $method = $request->getMethod();
             $action= $request->getAttribute('action');

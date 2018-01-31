@@ -107,8 +107,15 @@ $app->add(new MiddlewareCors( $container['settings']['cors']));
   
   if(!file_exists($configPath))
   {
+   
     $container['dm']=$dm;
     $app->get('/install',InstallerController::class );
+  }
+  else
+  {
+    $app->get('/install',function($request, $response, $args) {
+      $response->getBody()->write("Already installed. Try to navigate main url.");
+    } );
   }
 
 // Run app

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RepositoryService } from '../_service/repository.service';
-import { environment } from '../../environments/environment';
 import {FileUploadModule} from 'primeng/primeng';
 import { AuthenticationService } from '../_service/authentication.services';
+import { ConfigurationService } from '../_service/configuration.service';
 
 @Component({
   selector: 'app-upload-package',
@@ -13,14 +13,14 @@ export class UploadPackageComponent implements OnInit {
 
   repos: any[];
 
-  constructor( private repoService : RepositoryService, private authenticationService: AuthenticationService) { }
+  constructor( private repoService : RepositoryService, private authenticationService: AuthenticationService, private config:ConfigurationService) { }
 
   uploadSettings:any={};
 
   ngOnInit() {
     this.loadRepos();
     
-    this.uploadSettings.url = environment.apiHost+'catalog/Package';
+    this.uploadSettings.url = this.config.apiHost+'catalog/Package';
     this.uploadSettings.token=this.authenticationService.currentUser().token;
   }
 

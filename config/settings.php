@@ -5,6 +5,9 @@ return [
   'displayErrorDetails' => true,
   'ui' =>[
     'url'=>'http://localhost:4200/',
+    'baseHref'=>'/ui/',
+    'installed'=>true,
+    'apiHost' => 'http://localhost:3000/web/'
   ],
   'db' => [
     'driver' => 'mysql',

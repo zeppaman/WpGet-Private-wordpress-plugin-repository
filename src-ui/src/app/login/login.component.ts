@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_service/authentication.services';
 import { AlertService } from '../_service/alert.service';
 import { NgModule }      from '@angular/core';
+import { ConfigurationService } from '../_service/configuration.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,16 +17,19 @@ export class LoginComponent implements OnInit {
   user: any = {};
   loading = false;
   returnUrl: string;
-
+  env:any;
+ 
   constructor(
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService,
-      private alertService: AlertService) { }
+      private alertService: AlertService, 
+      private config:ConfigurationService) { }
 
       cliks: number= 0;
 
   ngOnInit() {
+    
       // reset login status
       this.authenticationService.logout();
 

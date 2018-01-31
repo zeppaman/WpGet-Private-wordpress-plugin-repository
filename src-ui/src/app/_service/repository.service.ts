@@ -3,29 +3,30 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { environment } from '../../environments/environment';
+
 import { Observable } from 'rxjs/Observable';
+import { ConfigurationService } from './configuration.service';
 
-
+import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class RepositoryService {
 
 
-  constructor(private http: Http, private messageService: MessageService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
-    return this.http.get(environment.apiHost+ 'api/repository/All')
-    .toPromise()
-    .then(res => {
-      console.log(res.json());
-      return <any[]> res.json();
-    })
+    return this.http.get(this.config.apiHost+ 'api/repository/All')
+    .map(res => {
+      console.log(res);
+      return <any[]> res;
+
+    }).toPromise()
     .then(data => data);
   }
 
   save(item:any)  {
     console.log(item);
-    return this.http.post(environment.apiHost+'api/repository/Item', item)
+    return this.http.post(this.config.apiHost+'api/repository/Item', item)
     .catch((err: Response) => {
         this.messageService.add({severity: 'error', 
         summary: 'Repository Save Erorr', 
@@ -42,9 +43,9 @@ export class RepositoryService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.delete(environment.apiHost+'api/repository/Item/'+item.id)
+    return this.http.delete(this.config.apiHost+'api/repository/Item/'+item.id)
     .toPromise()
-    .then(res => <any[]> res.json().rows)
+   
     .then(data => { 
       this.messageService.add({severity:'success', summary:'User deleted', detail: 'User' + item.username + ' has been deleted'});
       return data[0];

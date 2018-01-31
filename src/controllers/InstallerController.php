@@ -25,7 +25,7 @@ use \WpGet\Utils\PackageManager;
            $this->pm= new PackageManager($container);
            $this->writablePaths= array(
                realpath("../../")."/web/ui/assets" =>" during installation, must be changed after that.",
-               realpath("../../")."/conifg" =>" during installation, must be changed after that.",
+               realpath("../../")."/config" =>" during installation, must be changed after that.",
                $this->pm->tempDir =>"temporary forlder have to be writable",
                $this->pm->storageDir =>"temporary forlder have to be writable",
            );
@@ -78,7 +78,7 @@ use \WpGet\Utils\PackageManager;
                $output.=("<br>Generating JSON settings");      
                try
                {
-                file_put_contents($configPath, getdate());
+              //  file_put_contents($configPath, getdate());
             }
             catch ( \Exception $er1)
             {}
@@ -91,7 +91,32 @@ use \WpGet\Utils\PackageManager;
         
               //Write JSON config
               $jsonSettings=$this->dm->resolvePath('web/ui/assets/settings.json');
+
+              $baseUrl=  str_replace('/api/install','/' ,$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+              $fullUrl= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+              $host=substr($fullUrl,0,strpos($fullUrl,"/"));
+
+              $defaulSettings= array(
+                'apiHost' =>  $baseUrl,
+                'baseHref' =>  str_replace($host,'' ,$baseUrl).'ui/',
+                //'fullUrl' => $fullUrl,
+                'host' => $host,
+                );
+            
+             print_r( $defaulSettings);
+              
               $uisettings= $this->container['settings']['ui'];
+              print_r( $uisettings);
+              $uisettings=array_replace ( $defaulSettings,$uisettings);
+              print_r( $uisettings);
+              exit;
+            //   'ui' =>[
+            //     'url'=>'http://localhost:4200/',
+            //     'baseHref'=>'/ui/',
+            //     'installed'=>true,
+            //     'apiHost' => 'http://localhost:3000/web/'
+            //   ]
+
               try
               {
               file_put_contents($jsonSettings, json_encode($uisettings));

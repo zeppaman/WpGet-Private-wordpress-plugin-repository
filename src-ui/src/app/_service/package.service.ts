@@ -3,22 +3,27 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {Message} from 'primeng/components/common/api';
 import {MessageService} from 'primeng/components/common/messageservice';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs/Observable';
-
+import { ConfigurationService } from './configuration.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class PackageService {
 
 
-  constructor(private http: Http, private messageService: MessageService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList(reposlug:string, name:string) {
-    return this.http.get(environment.apiHost+ 'api/package/All')
+    return this.http.get(this.config.apiHost+ 'api/package/All')
+    .map(res => {
+      
+      return <any[]> res;
+
+    })
     .toPromise()
-    .then(res => {
+    .then(items => {
      
-      let items = <any[]> res.json();
+    
       let results:any[]=[];
 
       items.forEach(element => {

@@ -11,23 +11,26 @@ use \WpGet\Models\PublishToken as PublishToken;
 
 class ProtectedController extends DynamicController
 {
-    public function getUser($request)
+    public function getUser()
     {
-        $u=$this->getServiceUser($request);
+        $u=$this->getServiceUser($this->request);
         if(!isset($u))
         {
             
-            $u= $this->getUiUser($request);
+            $u= $this->getUiUser();
         }
-
+   
+       
         return $u;
     }
 
-    public function getUiUser($request)
+    public function getUiUser()
     {
-        $tokenHeader= $request->getHeaderLine('Authorization');
+        $tokenHeader= $this->request->getHeaderLine('Authorization');
         $token=null;
-        $data = $request->getParsedBody();
+        $data = $this->request->getParsedBody();
+
+       
 
         //to support header and data
         if(!isset( $tokenHeader) || strlen($tokenHeader)<5)
@@ -38,12 +41,14 @@ class ProtectedController extends DynamicController
         {
            
             //separate token
-            if(strpos($tokenHeader,"Bearer"))
+            if(strpos($tokenHeader,"Bearer")==0)
             {
-                $token=substr($tokenHeader,strlen("Bearer "));
+               
+                $token=substr($tokenHeader,strlen("Bearer "), strlen($tokenHeader));
             }
         }
-        
+       
+       
         if(!isset( $token) || strlen($token)<5)
         {
             return null;
@@ -54,6 +59,7 @@ class ProtectedController extends DynamicController
          
 
          $users=User::where('token', '=', $token)->get();
+         
          if( sizeof( $users) !=1)
          {
             return null;
@@ -70,9 +76,9 @@ class ProtectedController extends DynamicController
     }
 
 
-    public function getServiceUser($request)
+    public function getServiceUser()
     {
-        $tokenHeader= $request->getHeaderLine('Authorization');
+        $tokenHeader= $this->request->getHeaderLine('Authorization');
         
          if(!isset( $tokenHeader) || strlen($tokenHeader)<5)
          {
@@ -111,5 +117,33 @@ class ProtectedController extends DynamicController
         }
 
     }
+
+
+    public function authorize($roles=array())
+    {
+        $user=$this->getUser();
+        if(!isset($user))
+        {
+            header('HTTP/1.0 401 Unautorized'); 
+            die('You are not allowed to access this file.'); 
+        }
+        if($roles && sizeof($roles)>0)
+        {
+            foreach($roles as $roletoCheck)
+            {
+                if(in_array($roletoCheck,$user->roles))
+                {
+                    return;
+                } 
+            }
+            header('HTTP/1.0 403 Forbidden'); 
+            die('You are not allowed to access this file.'); 
+       }
+     
+    }
+
+  
+      
+    
 
 }
