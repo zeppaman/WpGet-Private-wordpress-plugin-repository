@@ -86,8 +86,8 @@ use WpGet\Models\Package;
            
             if(!isset($name) || strlen($name)==0)
             {
-                $this->logger->error( "name missing");
-                return $response=  $response->withStatus(500)->body()->write("name missing");
+                $this->logger->info( "name missing, try to use YAML definition");
+                //return $response=  $response->withStatus(500)->body()->write("name missing");
             }
 
            

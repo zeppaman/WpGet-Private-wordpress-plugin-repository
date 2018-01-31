@@ -8,12 +8,13 @@ class PackageTable extends TableBase
         return array(
             'reposlug' =>'string',
             'name' =>'string',
-            'description'=>'string',
+            'description'=>'text',
             'major'=>'integer',
             'minor'=>'integer',
             'build' =>'integer',
             'version' =>'string',            
-            'relativepath' =>'string'
+            'relativepath' =>'string',
+            'changelog' =>'text'
         );
     }
 

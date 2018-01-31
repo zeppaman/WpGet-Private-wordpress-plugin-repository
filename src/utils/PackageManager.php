@@ -2,7 +2,8 @@
 namespace WpGet\utils;
 
 use \WpGet\Models\Package;
-
+use \ZipArchive;
+use Symfony\Component\Yaml\Yaml as YamlParser;
 
 
 class PackageManager
@@ -49,39 +50,70 @@ class PackageManager
 
     public function addPackage(Package $pk,$uploadedFile)
     {
-      
+        $tmpPath=Util::generateRandomString(10).".zip";
+        $tmpFullPath=$this->tempDir . DIRECTORY_SEPARATOR . $tmpPath;
+        $this->ensureDirForPath($tmpFullPath);
+        $uploadedFile["file"]->moveTo($tmpFullPath);        
+        $pk=$this->loadFromYml($pk,$tmpFullPath);
 
        
-        $this->logger->debug("Replaced path".$this->tempDir." ". $this->$storageDir);
+        $this->logger->debug("Replaced path".$this->tempDir." ". $this->storageDir);
         $packages=Package::where('version', '=', $pk->version)
         ->where('name', '=', $pk->name)
         ->where('reposlug', '=', $pk->reposlug)
         ->get();
 
-        // if(isset($packages) && sizeof($packages)>0)
-        // {
-        //   throw new \Exception("Unable to overwirte a package. please add a new version.") ;
-        // }
+        if(isset($packages) && sizeof($packages)>0)
+        {
+          throw new \Exception("Unable to overwirte a package. please add a new version.") ;
+        }
 
     
     
-        $repoPath=$pk->reposlug."/".$pk->name."/".$pk->version."/".$pk->name."_".$pk->version.".zip";
+        $repoPath=$pk->reposlug."/".$pk->name."/".$pk->version."/".$pk->name."_".$pk->version.".zip";        
+        $repoFullPath=$this->storageDir . DIRECTORY_SEPARATOR . $repoPath;
         $this->logger->info("Repo path:".$repoPath);
         $pk->relativepath=$repoPath;
-        $tmpPath=Util::generateRandomString(10).".zip";
-        $tmpFullPath=$this->tempDir . DIRECTORY_SEPARATOR . $tmpPath;
-        $repoFullPath=$this->$storageDir . DIRECTORY_SEPARATOR . $repoPath;
+        
 
-        $this->ensureDirForPath($tmpFullPath);
+        
         $this->ensureDirForPath($repoFullPath);
 
         $this->logger->info("uploading to $repoFullPath ($tmpFullPath)");
-        $uploadedFile["file"]->moveTo($tmpFullPath);
+       
+
+        if(!$pk->description)
+        {
+            $pk->description="No description provided for".$pk->name;
+        }
+        if(!$pk->name || sizeof($pk->name)==0)
+        {
+            throw new \Exception("Unable to upload a package without a name.");
+        }
         $pk->save();
         rename($tmpFullPath,$repoFullPath);
         return $pk;
     }
 
+    public function loadFromYml($pk,$packPath)
+    {
+        $zip = new \ZipArchive;
+        if ($zip->open($packPath, ZipArchive::CREATE) !== TRUE) {
+            return $pk;
+        }
+
+       $files= $zip->locateName('.wpget.yml', ZipArchive::FL_NOCASE|ZipArchive::FL_NODIR) . "\n";
+       if($files && $files>-1)
+       {
+            $contents=$zip->getFromIndex(2);
+            $manifest=YamlParser::parse( $contents);
+            if(isset($manifest["description"])) $pk->description=$manifest["description"];
+            if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
+            if(isset($manifest["version"]))   $pk->version=trim($manifest["version"]);
+            
+       }
+       return $pk;
+    }
     public function getPackage($versionStr, $name,$reposlug)
     {
 
