@@ -54,7 +54,7 @@ use WpGet\Models\Package;
 
             // user control
             
-            $user=$this->getUser($request);
+            $user=$this->getUser();
            
             if($user->type=="SERVICE")
             {

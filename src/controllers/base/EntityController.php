@@ -22,7 +22,7 @@ use WpGet\Controllers\ProtectedController;
      
   
     function getAll($request, $response, $args) {   
-        
+        $this->authorize();
         $td=$this->getTableDefinition();
         $columns=$td->getAllColumns();
         $model=$this->getModel();
@@ -34,6 +34,7 @@ use WpGet\Controllers\ProtectedController;
     }
 
     function getItem ($request, $response, $args) {
+        $this->authorize();
         $model=$this->getModel();
         $id = $args['id'];
         $dev = $model::find($id);
@@ -44,6 +45,8 @@ use WpGet\Controllers\ProtectedController;
 
     function postItem($request, $response, $args) 
     {
+        $this->authorize();
+
         $model=$this->getModel();
         $data = $request->getParsedBody();
         $dev = new $model();
@@ -62,6 +65,8 @@ use WpGet\Controllers\ProtectedController;
 
     function deleteItem($request, $response, $args) 
     {
+        $this->authorize();
+
         $model=$this->getModel();
        $id = $args['id'];
        $dev = $model::find($id);
@@ -71,6 +76,7 @@ use WpGet\Controllers\ProtectedController;
 
     
      function putItem($request, $response, $args) {
+        $this->authorize();
         $model=$this->getModel();
         $data = $request->getParsedBody();
         $id = (\array_key_exists('id',$args))? $args['id']:$data["id"];

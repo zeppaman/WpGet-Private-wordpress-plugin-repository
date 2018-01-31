@@ -3,7 +3,7 @@ import {Http} from "@angular/http";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { environment } from '../../environments/environment.prod';
-
+import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class ConfigurationService {
     apiHost:string;
@@ -20,7 +20,7 @@ export class ConfigurationService {
                 this.apiHost=config.apiHost;
                 this.baseHref=config.baseHref;
                 this.installed=config.installed;
-                if(this.installed==false)// && environment.production==true)
+                if(this.installed==false && environment.production==true)
                 {
                     window.location.href= this.apiHost+'api/install';
                 }

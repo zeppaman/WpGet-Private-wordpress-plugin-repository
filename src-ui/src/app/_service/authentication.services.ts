@@ -8,7 +8,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 
 import { ConfigurationService } from './configuration.service';
-
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 @Injectable()
 export class AuthenticationService 
 {
@@ -19,7 +20,7 @@ export class AuthenticationService
      user:any= {};
     currentUser() {
     
-      this.user = JSON.parse( localStorage.getItem('currentUser'));
+      this.user = JSON.parse(localStorage.getItem(environment.userKey));
       return this.user;
     }
     login(username: string, password: string) {
@@ -28,11 +29,11 @@ export class AuthenticationService
         return this.http.post(this.config.apiHost +'auth/Authorize', inputuser)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
-                console.log(response);
+            
                 if (response) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify(response.json()));
-                    console.log( JSON.stringify(response.json()));
+                    // store user details and jwt token in local storage to keep user logged in between page refreshes                   
+                    localStorage.setItem(environment.userKey, JSON.stringify(response.json()));                 
+                 
                 }
             })
             .catch((err:Response) => {
@@ -47,7 +48,7 @@ export class AuthenticationService
 
     logout() {
         // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
+        localStorage.clear();
         this.user={};
     }
 }

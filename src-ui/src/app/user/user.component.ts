@@ -30,7 +30,7 @@ export class UserComponent implements OnInit {
 
  reload()
  {
-    this.userService.getList().then(users => this.users = users);
+    this.userService.getList().then(data => this.users = data);
  }
 
 showDialogToAdd() {

@@ -6,26 +6,25 @@ import {MessageService} from 'primeng/components/common/messageservice';
 
 import { Observable } from 'rxjs/Observable';
 import { ConfigurationService } from './configuration.service';
-
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class PublishTokenService {
 
 
-  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
-    return this.http.get(this.config.apiHost+ 'api/publishtoken/All')
-    .toPromise()
-    .then(res => {
-      console.log(res.json());
-      return <any[]> res.json();
-    })
-    .then(data => data);
+    return this.http.get(this.config.apiHost+ 'api/publishtoken/All')    
+   .map(res => {
+      
+      return <any[]> res;
+
+    }).toPromise();
   }
 
   save(item:any)  {
-    console.log(item);
+    
     return this.http.post(this.config.apiHost+'api/publishtoken/Item', item)
     .catch((err: Response) => {
         this.messageService.add({severity: 'error', 
@@ -42,10 +41,10 @@ export class PublishTokenService {
   }
 
   delete(item:any)  {
-    console.log(item);
+    
     return this.http.delete(this.config.apiHost+'api/publishtoken/Item/'+item.id)
     .toPromise()
-    .then(res => <any[]> res.json().rows)
+    .then(res => <any[]> ((<any>res).rows))
     .then(data => { 
       this.messageService.add({severity:'success', summary:'User deleted', detail: 'User' + item.username + ' has been deleted'});
       return data[0];

@@ -27,7 +27,7 @@ use \WpGet\db\PackageTable as PackageTable;
      {
          try
          {
-             $user=$this->getUiUser($request);
+             $user=$this->getUiUser();
 
              
  

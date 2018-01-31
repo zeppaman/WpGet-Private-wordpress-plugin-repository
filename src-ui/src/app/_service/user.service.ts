@@ -8,21 +8,22 @@ import 'rxjs/add/operator/catch';
 
 import { Observable } from 'rxjs/Observable';
 import { ConfigurationService } from './configuration.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserService {
 
 
-  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
     return this.http.get(this.config.apiHost+ 'api/user/All')
-        .toPromise()
-        .then(res => {
-          console.log(res.json());
-          return <any[]> res.json();
-        })
-        .then(data => data);
+    .map(res => {
+      console.log(res);
+      return <any[]> res;
+
+    }).toPromise();
+       
   }
 
   save(item: any)  {
@@ -44,9 +45,8 @@ export class UserService {
 
   delete(item:any)  {
     console.log(item);
-    return this.http.delete(this.config.apiHost+'api/user/Item/'+item.id)
+    return this.http.delete(this.config.apiHost+'api/user/Item/'+item.id)    
     .toPromise()
-    .then(res => <any[]> res.json().rows)
     .then(data => { 
       this.messageService.add({severity:'success', summary:'User deleted', detail: 'User' + item.username + ' has been deleted'});
       return data[0];

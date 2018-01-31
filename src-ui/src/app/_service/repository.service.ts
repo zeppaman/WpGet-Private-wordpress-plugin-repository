@@ -7,20 +7,20 @@ import {MessageService} from 'primeng/components/common/messageservice';
 import { Observable } from 'rxjs/Observable';
 import { ConfigurationService } from './configuration.service';
 
-
+import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class RepositoryService {
 
 
-  constructor(private http: Http, private messageService: MessageService, private config:ConfigurationService) { }
+  constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
 
   getList() {
     return this.http.get(this.config.apiHost+ 'api/repository/All')
-    .toPromise()
-    .then(res => {
-      console.log(res.json());
-      return <any[]> res.json();
-    })
+    .map(res => {
+      console.log(res);
+      return <any[]> res;
+
+    }).toPromise()
     .then(data => data);
   }
 
@@ -45,7 +45,7 @@ export class RepositoryService {
     console.log(item);
     return this.http.delete(this.config.apiHost+'api/repository/Item/'+item.id)
     .toPromise()
-    .then(res => <any[]> res.json().rows)
+   
     .then(data => { 
       this.messageService.add({severity:'success', summary:'User deleted', detail: 'User' + item.username + ' has been deleted'});
       return data[0];

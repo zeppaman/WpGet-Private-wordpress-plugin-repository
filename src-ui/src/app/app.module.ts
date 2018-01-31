@@ -46,8 +46,10 @@ import {PanelModule} from 'primeng/primeng';
 import {FileUploadModule} from 'primeng/primeng';
 import { PackageService } from './_service/package.service';
 import { ConfigurationService } from './_service/configuration.service';
-import { Http } from '@angular/http/src/http';
 import { APP_BASE_HREF } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './_service/http.interceptor';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -70,6 +72,7 @@ import { APP_BASE_HREF } from '@angular/common';
     BrowserModule,
     BrowserAnimationsModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     SplitButtonModule,
     MenuModule,
@@ -101,17 +104,26 @@ import { APP_BASE_HREF } from '@angular/common';
     PackageService,
     ConfigurationService,
     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    {
         provide: APP_INITIALIZER,
         useFactory: (config: ConfigurationService) => () => config.load(),
-        deps: [ConfigurationService,HttpModule],
+        deps: [ConfigurationService,HttpClientModule],
         multi: true
-    },,
+    },
     { provide: APP_BASE_HREF, 
       useFactory: (config: ConfigurationService) => {
         return config.baseHref;
       },
-      deps: [ConfigurationService,HttpModule],
+      deps: [ConfigurationService,HttpClientModule],
      },
+
+    
+      
+    
       
     ],
   bootstrap: [AppComponent]
