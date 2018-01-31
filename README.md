@@ -67,6 +67,14 @@ This is easy. We have prepared a ready-to-use php updater class that interact wi
 
 For now, [just copy and paste this class into your plugin](https://raw.githubusercontent.com/zeppaman/WpGet/master/src-client/WpGetUpdater.php). In next future we are going to deliver this using a composer package and a public wordpress plugin.
 
+```yaml
+version: 1.2.4 # versione in form major.minor.build
+name: name of the package
+description: >
+ Long description that can contains also html statements
+ <h1> but remember to indent all lines with spaces to be YAML compliant! </h1>
+changelog: Write here changelogs. This also can be a multiline field...
+```
  
 ## How to install the server
  
