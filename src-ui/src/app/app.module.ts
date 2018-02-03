@@ -52,7 +52,7 @@ import { AuthInterceptor } from './_service/http.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 
 export function configFactory(config:ConfigurationService) {
-  return config.load();
+   return () => config.load();
 }
 
 export function baseHrefFactory (config: ConfigurationService)  {
