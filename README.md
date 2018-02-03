@@ -114,7 +114,7 @@ Starting from released bundle:
 
 Usage
 
-* [deploy a package](deploy-wget-package)
+* [deploy a package](https://github.com/zeppaman/WpGet/wiki/deploy-wget-package)
 
 Dev: extend and contribute
 * [Setup local env](https://github.com/zeppaman/WpGet/wiki/wpget-setup-local-env)
