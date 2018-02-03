@@ -51,6 +51,14 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './_service/http.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 
+export function configFactory(config:ConfigurationService) {
+  return config.load();
+}
+
+export function baseHrefFactory (config: ConfigurationService)  {
+  return config.baseHref;
+}
+
 
 
 @NgModule({
@@ -110,14 +118,12 @@ import { HttpClientModule } from '@angular/common/http';
     },
     {
         provide: APP_INITIALIZER,
-        useFactory: (config: ConfigurationService) => () => config.load(),
+        useFactory:configFactory,
         deps: [ConfigurationService,HttpClientModule],
         multi: true
     },
     { provide: APP_BASE_HREF, 
-      useFactory: (config: ConfigurationService) => {
-        return config.baseHref;
-      },
+      useFactory: baseHrefFactory,
       deps: [ConfigurationService,HttpClientModule],
      },
 

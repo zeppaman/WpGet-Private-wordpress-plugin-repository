@@ -10,7 +10,9 @@ export class ConfigurationService {
     baseHref:string;
     installed:boolean;
     constructor( private http: Http) {
+       this.load();
     }
+
 
     load() {
         return new Promise((resolve) => {

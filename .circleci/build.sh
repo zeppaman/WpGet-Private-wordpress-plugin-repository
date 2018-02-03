@@ -11,7 +11,7 @@ sudo apt-get install -y nodejs
 #angular build
 cd src-ui;
 npm install;
-npm run ng build;
+npm run ng build --env prod;
 cd ..;
 
 #delete unused folders
