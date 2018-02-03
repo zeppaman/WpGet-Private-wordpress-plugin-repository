@@ -56,7 +56,7 @@ export function configFactory(config:ConfigurationService) {
 }
 
 export function baseHrefFactory (config: ConfigurationService)  {
-  return config.baseHref;
+  return window.location.href.substring(window.location.href.lastIndexOf(config.baseHref));
 }
 
 

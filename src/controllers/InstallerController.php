@@ -45,16 +45,16 @@ use \WpGet\Utils\PackageManager;
               $output.=("<br> CHECKING : ".$path);
                 try
                 {
-                    $this->pm->ensureDirForPath($path);
+                    $this->pm->ensureDir($path);
                     if(!is_writable(str_replace("//","/", $path."/")))
                     {
-                         $output.=("<span style='color:red'>&nbsp;&nbsp;&nbsp; : Folder not writable</span>");
+                         $output.=("<span style='color:red'>&nbsp;&nbsp;&nbsp;> : Folder not writable</span>");
                         $fileErrors=true;
                     }
                 }
                 catch(\Exception $err)
                 {
-                    $output.=("<span style='color:red'>&nbsp;&nbsp;&nbsp; : Unable to create folder</span>");
+                    $output.=("<span style='color:red'>&nbsp;&nbsp;&nbsp;> : Unable to create folder</span>");
                     $fileErrors=true;
                 }
                 
@@ -66,22 +66,19 @@ use \WpGet\Utils\PackageManager;
                 $fileErrors=true;
                 return $response->getBody()->write($output);
               }
-              
+
+              $lockFile='web/ui/assets/settings.json';//deleted after build
+              $configPath=$this->dm->resolvePath($lockFile);
 
               if(true)
               {
                 // TODO: check for file or upgrade table
                 $output.=("<br>Checking for table data (TODO)");
-                $configPath=$this->dm->resolvePath('config/installed.lock');
+               
                $output.=("<br>Start DB Upgrade");
                 $this->dm->upgradeDB( $this->container['settings']['db']);
                $output.=("<br>Generating JSON settings");      
-               try
-               {
-              //  file_put_contents($configPath, getdate());
-            }
-            catch ( \Exception $er1)
-            {}
+               
                 $output.=("<br>Installation completed");
               }
               else
@@ -103,25 +100,22 @@ use \WpGet\Utils\PackageManager;
                 'host' => $host,
                 );
             
-             print_r( $defaulSettings);
+           
               
               $uisettings= $this->container['settings']['ui'];
-              print_r( $uisettings);
+            
               $uisettings=array_replace ( $defaulSettings,$uisettings);
-              print_r( $uisettings);
-              exit;
-            //   'ui' =>[
-            //     'url'=>'http://localhost:4200/',
-            //     'baseHref'=>'/ui/',
-            //     'installed'=>true,
-            //     'apiHost' => 'http://localhost:3000/web/'
-            //   ]
+            
+           
 
               try
               {
-              file_put_contents($jsonSettings, json_encode($uisettings));
+                file_put_contents($jsonSettings, json_encode($uisettings));
+                file_put_contents($configPath, json_encode($uisettings));
               }
               catch ( \Exception $er12) {}
+
+
             }
             catch(\Exception $err)
             {

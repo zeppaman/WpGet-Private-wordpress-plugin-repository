@@ -103,7 +103,7 @@ $app->add(new MiddlewareCors( $container['settings']['cors']));
   $app->any('/publishtoken/{action}[/{id}]', PublishTokenController::class);
   $app->any('/package/{action}[/{id}]', PackageController::class);
 
-  $configPath=$dm->resolvePath('config/installed.lock');
+  $configPath=$dm->resolvePath('web/ui/assets/settings.json');
   
   if(!file_exists($configPath))
   {
