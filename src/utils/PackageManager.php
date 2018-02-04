@@ -114,11 +114,11 @@ class PackageManager
             $manifest=YamlParser::parse( $contents);
             if(isset($manifest["description"])) $pk->description=$manifest["description"];
             if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
-            if(isset($manifest["name"])) $pk->name=$manifest["name"];
+            if(isset($manifest["name"])) $pk->name=trim($manifest["name"]);
             if(isset($manifest["version"]))   
             {
 
-                $pk->setVersionFromString($manifest["version"]);
+                $pk->setVersionFromString(trim($manifest["version"]));
             }
             
        }
