@@ -107,7 +107,7 @@ class PackageManager
             return $pk;
         }
 
-       $files= $zip->locateName('.wpget.yml', ZipArchive::FL_NOCASE|ZipArchive::FL_NODIR) . "\n";
+       $files= $zip->locateName('.wpget.yml', ZipArchive::FL_NOCASE|ZipArchive::FL_NODIR) ;
        
        if($files && $files>-1)
        {
