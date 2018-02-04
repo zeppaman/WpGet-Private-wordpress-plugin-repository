@@ -110,7 +110,7 @@ class PackageManager
        $files= $zip->locateName('.wpget.yml', ZipArchive::FL_NOCASE|ZipArchive::FL_NODIR) . "\n";
        if($files && $files>-1)
        {
-            $contents=$zip->getFromIndex(2);
+            $contents=$zip->getFromIndex($files[0]);
             $manifest=YamlParser::parse( $contents);
             if(isset($manifest["description"])) $pk->description=$manifest["description"];
             if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
