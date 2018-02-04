@@ -11,7 +11,7 @@ sudo apt-get install -y nodejs
 #angular build
 cd src-ui;
 npm install;
-npm run ng build;
+npm run ng build --env prod;
 cd ..;
 
 #delete unused folders
@@ -19,6 +19,7 @@ rm -rf src-ui;
 rm -rf .circleci;
 rm -rf .git;
 rm -rf .vscode; 
+rm -rf web/ui/assets/settings.json
 
 #build artifact
 mkdir /tmp/artifacts;

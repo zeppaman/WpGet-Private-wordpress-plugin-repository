@@ -1,0 +1,30 @@
+ Options -Indexes +FollowSymLinks
+ 
+#redirect to install if not installed
+RewriteCond %{DOCUMENT_ROOT}/ui/assets/settings.json !-f
+RewriteCond  %{REQUEST_URI}  !^(.*)/api/install$
+RewriteCond  %{REQUEST_URI}  !^(.*)/api/index.php$
+Header always set Cache-Control max-age=0
+Header always set Expires "Thu, 01 Dec 1994 16:00:00 GMT"
+RewriteRule ^(.*)$ /api/install [L,R=301]
+ 
+# redirect to UI
+RewriteEngine On
+RewriteRule ^$ /ui/index.html [L]
+
+#UI (angular routes)
+RewriteEngine On
+RewriteCond  %{REQUEST_FILENAME}  !-f
+RewriteCond  %{REQUEST_FILENAME}  !-d
+RewriteRule  ^ui/(.*)$   /ui/index.html [QSA,L]
+RewriteRule  ^ui/$   /ui/index.html [QSA,L]
+
+#Backend
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ /api/index.php [QSA,L]
+RewriteRule ^auth/(.*)$ /auth/index.php [QSA,L]
+RewriteRule ^catalog/(.*)$ /catalog/index.php [QSA,L]
+

@@ -42,6 +42,10 @@ class PackageManager
     function ensureDirForPath($path)
     {
         $dir=dirname($path);
+        $this->ensureDir($dir);
+    }
+    function ensureDir($dir)
+    {
         if(!file_exists($dir))
         {
             mkdir($dir, 0777, true);
