@@ -108,6 +108,7 @@ class PackageManager
         }
 
        $files= $zip->locateName('.wpget.yml', ZipArchive::FL_NOCASE|ZipArchive::FL_NODIR) . "\n";
+       
        if($files && $files>-1)
        {
             $contents=$zip->getFromIndex($files[0]);
