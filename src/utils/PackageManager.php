@@ -90,6 +90,7 @@ class PackageManager
         {
             throw new \Exception("Unable to upload a package without a name.");
         }
+      
         $pk->save();
         rename($tmpFullPath,$repoFullPath);
         return $pk;
@@ -109,7 +110,12 @@ class PackageManager
             $manifest=YamlParser::parse( $contents);
             if(isset($manifest["description"])) $pk->description=$manifest["description"];
             if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
-            if(isset($manifest["version"]))   $pk->version=trim($manifest["version"]);
+            if(isset($manifest["name"])) $pk->name=$manifest["name"];
+            if(isset($manifest["version"]))   
+            {
+
+                $pk->setVersionFromString($manifest["version"]);
+            }
             
        }
        return $pk;

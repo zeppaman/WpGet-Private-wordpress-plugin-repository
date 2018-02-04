@@ -41,10 +41,11 @@ use WpGet\Models\Package;
             
             $this->logger->debug( print_r($data,TRUE));
 
-            $reposlug=$data["reposlug"];
-            $name=$data["name"];
-            $versionStr=$data["version"];
+            $reposlug=isset($data["reposlug"])?$data["reposlug"]:null ;
+            $name=isset($data["name"])? $data["name"]:null;
 
+            $versionStr=isset($data["version"])?$data["version"]:null;
+           
             if(!isset($reposlug) || strlen($reposlug)==0)
             {
                 $reposlug="default";
@@ -55,8 +56,12 @@ use WpGet\Models\Package;
             // user control
             
             $user=$this->getUser();
-           
-            if($user->type=="SERVICE")
+            if(!isset($user))
+            {
+                //user not authentication or wrong code
+                throw new \Exception("user not authentication or wrong code");
+            }
+            else if($user->type=="SERVICE")
             {
                 $this->logger->debug( json_encode( $user));
                 $pt= PublishToken::where('writetoken', '=', $user->token)->get()[0];
@@ -108,8 +113,8 @@ use WpGet\Models\Package;
 
             if(!isset($versionStr) || strlen($versionStr)==0)
             {
-                $this->logger->error("version missing");
-                return $response=  $response->withStatus(500)->body()->write("version missing");
+                $this->logger->info("version missing");
+               // return $response=  $response->withStatus(500)->body()->write("version missing");
             }
 
             
@@ -124,9 +129,10 @@ use WpGet\Models\Package;
             $this->logger->info("filling package data");
             $pk->name=$name;
             $pk->reposlug=$reposlug;
-           
-            $pk->setVersionFromString($versionStr);
-            
+            if(isset($versionStr))
+            {
+                $pk->setVersionFromString($versionStr);
+            }
             $this->logger->debug( "saving package:".$pk->toJSon());
             
            
