@@ -29,6 +29,7 @@ p-sidebar .ui-menu
     margin: 0px;
     padding: 0px;
     width: 100%;
+   
 }
 
 .ng-tns-c2-0.ng-trigger.ng-trigger-panelState.ui-sidebar.ui-widget.ui-widget-content.ui-shadow.ui-sidebar-active.ui-sidebar-left {
@@ -50,7 +51,7 @@ p-sidebar .ui-menu
     height: calc(100% - 70px);
 }
 
-#layout-sidebar .layout-menu>a {
+#layout-sidebar .layout-menu>a,#layout-sidebar .layout-menu>a:visited {
     width: 100%;
     height: 50px;
     display: block;
@@ -59,8 +60,15 @@ p-sidebar .ui-menu
     border-top: 1px solid #e3e9ea;
     box-sizing: border-box;
     border-bottom: 1px solid #156090;
+    text-decoration: none !important;
+    color: #156090;
+    font-weight: bold;
+    font-size: 18px;
 }
-
+#layout-sidebar .layout-menu>a:hover
+{
+    background: #ddd;
+}
 #layout-content {
     margin-left: 300px;
     padding-top: 70px;

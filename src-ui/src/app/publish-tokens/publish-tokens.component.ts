@@ -34,8 +34,7 @@ export class PublishTokensComponent implements OnInit {
           this.reload();
           this.loadRepos();
        }
-  
- 
+
   
     loadRepos()
     {
@@ -78,6 +77,7 @@ export class PublishTokensComponent implements OnInit {
           this.generateReader();
           this.generateWriter();
           this.displayDialog = true;
+          this.item.reposlug = this.repos[0].value;
       }
       
       closeDialog() {

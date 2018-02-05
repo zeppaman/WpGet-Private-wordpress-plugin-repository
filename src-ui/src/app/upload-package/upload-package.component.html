@@ -1,22 +1,39 @@
 <h1>Upload Package</h1>
+<p>This form upload a package and stores to the reposiotory. Package name is overwritten by internal manifest if present. Version is automatically computed if not specified inside manifest.</p>
+<form (submit)='onSubmit(form)' ngNoForm name="uplad" method="POST" enctype="multipart/form-data" attr.action="{{uploadSettings.url}}">
+  <p-panel header="Package details">
+    <div class="row mb-3">
+      <div class="col-sm-3">
+        <strong>File to upload:</strong>
+      </div>
+      <div class="col-sm-7">
+        <input type="file" accept="application/zip,application/x-zip,application/x-zip-compressed" name="file" /> <br></div>
+      <div class="col-sm-3">
+        <strong>Repository: </strong>
+      </div>
+      <div class="col-sm-7">
+        <p-dropdown [options]="repos" [style]="{'width':'365px'}" required filter="true" name="reposlug">
+        </p-dropdown><br>
+      </div>
 
-<form  (submit)='onSubmit(form)' ngNoForm name="uplad" method="POST" enctype="multipart/form-data" attr.action="{{uploadSettings.url}}" >
+      <div class="col-sm-3">
+        <strong>Package name:</strong>
+      </div>
+      <div class="col-sm-7">
+        <input type="text" name="name" pInputText /><br>
+      </div>
 
-  File to upload:<input type="file" accept="application/zip,application/x-zip,application/x-zip-compressed" name="file" /> <br/>
-  Repository:  <p-dropdown [options]="repos" [style]="{'width':'365px'}" required filter="true" name="reposlug">
-    </p-dropdown><br/>
-  
-  Package name: <input type="text"  name="name" pInputText /><br/>
 
-  
-  <input type="hidden"  name="version" value="next" /><br/>
+    
+<hr>
+      <div class="col-sm-10">
+        <input type="submit" value="Upload" />
+      </div>
+    </div>
+  </p-panel>
 
-  <input type="hidden"  name="token" value="{{uploadSettings.token}}" /><br/>
-  
+  <input type="hidden" name="version" value="next" />     
 
-  
-  <input type="submit"  value="Upload" />
+  <input type="hidden" name="token" value="{{uploadSettings.token}}" />
 
 </form>
-
-

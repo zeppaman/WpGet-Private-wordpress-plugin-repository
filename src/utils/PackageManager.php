@@ -90,7 +90,7 @@ class PackageManager
         {
             $pk->description="No description provided for".$pk->name;
         }
-        if(!$pk->name || sizeof($pk->name)==0)
+        if(!$pk->name || strlen($pk->name)==0)
         {
             throw new \Exception("Unable to upload a package without a name.");
         }
@@ -111,7 +111,8 @@ class PackageManager
        
        if($files && $files>-1)
        {
-            $contents=$zip->getFromIndex($files[0]);
+           
+            $contents=$zip->getFromIndex($files);
             $manifest=YamlParser::parse( $contents);
             if(isset($manifest["description"])) $pk->description=$manifest["description"];
             if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
@@ -121,6 +122,8 @@ class PackageManager
 
                 $pk->setVersionFromString(trim($manifest["version"]));
             }
+
+           
             
        }
        return $pk;

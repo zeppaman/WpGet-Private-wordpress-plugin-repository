@@ -50,6 +50,8 @@ import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './_service/http.interceptor';
 import { HttpClientModule } from '@angular/common/http';
+import { MenubarModule } from 'primeng/components/menubar/menubar';
+import { PanelMenuModule } from 'primeng/components/panelmenu/panelmenu';
 
 export function configFactory(config:ConfigurationService) {
    return () => config.load();
@@ -99,7 +101,9 @@ export function baseHrefFactory (config: ConfigurationService)  {
     InputTextareaModule,
     DropdownModule,
     PanelModule,
-    FileUploadModule
+    FileUploadModule,
+    MenubarModule,
+    PanelMenuModule
 
   ],
   providers: [AuthenticationService, 
