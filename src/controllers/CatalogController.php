@@ -162,8 +162,7 @@ use WpGet\Models\Package;
         try
         {
             $data = $request->getQueryParams();        
-            $this->logger->debug("DATA:".print_r($data,TRUE));
-
+       
             $user=$this->getServiceUser($request);
             $pt= PublishToken::where('readtoken', '=', $user->token)->get();
 
@@ -213,8 +212,7 @@ use WpGet\Models\Package;
         try
         {
             $data = $request->getQueryParams();
-            $this->logger->debug("DATA:".print_r($data,TRUE));
-
+         
             $user=$this->getServiceUser($request);
             $pt= PublishToken::where('readtoken', '=', $user->token)->get();
 
@@ -248,18 +246,18 @@ use WpGet\Models\Package;
             {
                 return $response=  $response->withStatus(500)->getBody()->write("name missing");
             }
-
+            
             if(!isset($versionStr) || strlen($versionStr)==0)
             {
-               $package= $this->pm->getLastestVersion($name);
+                $package= $this->pm->getLastestVersion($name,$reposlug);
+
             }
             else
             {
-
                 $package=$this->pm->getPackage($versionStr,$name,$reposlug);
             }
-            
-             return  $response->getBody()->write($package->toJson());
+            //  if package not found
+            return  empty($package) ? null : $response->getBody()->write($package->toJson());
 
         }
         catch(\Exception $e)
