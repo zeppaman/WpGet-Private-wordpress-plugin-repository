@@ -66,6 +66,7 @@ Any other needs or suggestion? [Please open a issue](https://github.com/zeppaman
 This is easy. We have prepared a ready-to-use php updater class that interact with plugin repository to keep plugin updated. This needs only to setup some wordpress settings (repository url and access token). After that your plugin will check for newer version using WpGet and will download them using the private repository. Easy!
 
 For now, [just copy and paste this class into your plugin](https://raw.githubusercontent.com/zeppaman/WpGet/master/src-client/WpGetUpdater.php). In next future we are going to deliver this using a composer package and a public wordpress plugin.
+An example of complete yaml file it can be found inside plugin zip file [here](https://github.com/zeppaman/WpGet/raw/master/example/plugin-test.zip)
 
 ```yaml
 version: 1.2.4 # versione in form major.minor.build
