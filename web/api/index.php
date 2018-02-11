@@ -7,10 +7,6 @@ ini_set('display_errors', 'On');
 ini_set('html_errors', 0);
 error_reporting(-1);
 
-
-
-
-
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \WpGet\Controllers\UserController as UserController;
@@ -65,26 +61,26 @@ $container = $app->getContainer();
 
 $container['logger'] = function($c)
 {
-  $logger = new Logger('api');
-  
-   $rotating = new RotatingFileHandler(__DIR__ . "/../../logs/api.log", 0, Logger::DEBUG);
-   $logger->pushHandler($rotating);
-   return $logger;
+	$logger = new Logger('api');
+
+	$rotating = new RotatingFileHandler(__DIR__ . "/../../logs/api.log", 0, Logger::DEBUG);
+	$logger->pushHandler($rotating);
+	return $logger;
 };
 
  
 $container['db'] = function ($container) {
-  $capsule = new \Illuminate\Database\Capsule\Manager;
-  $capsule->addConnection($container['settings']['db']);
-  $capsule->setAsGlobal();
-  $capsule->bootEloquent();
+	$capsule = new \Illuminate\Database\Capsule\Manager;
+	$capsule->addConnection($container['settings']['db']);
+	$capsule->setAsGlobal();
+	$capsule->bootEloquent();
 
-  $capsule->getContainer()->singleton(
-    Illuminate\Contracts\Debug\ExceptionHandler::class,
-    ErrorHandler::class
-  );
+	$capsule->getContainer()->singleton(
+		Illuminate\Contracts\Debug\ExceptionHandler::class,
+		ErrorHandler::class
+	);
 
-  return $capsule;
+	return $capsule;
 };
 
 
@@ -95,28 +91,29 @@ $app->add(new MiddlewareCors( $container['settings']['cors']));
 
   
 
-  //Routing configuration 
+//Routing configuration 
 
-  $app->any('/repository/{action}[/{id}]', RepositoryController::class);
-  $app->any('/user/{action}[/{id}]', UserController::class);
-  
-  $app->any('/publishtoken/{action}[/{id}]', PublishTokenController::class);
-  $app->any('/package/{action}[/{id}]', PackageController::class);
+$app->any('/repository/{action}[/{id}]', RepositoryController::class);
+$app->any('/user/{action}[/{id}]', UserController::class);
 
-  $configPath=$dm->resolvePath('web/ui/assets/settings.json');
-  
-  if(!file_exists($configPath))
-  {
-   
-    $container['dm']=$dm;
-    $app->get('/install',InstallerController::class );
-  }
-  else
-  {
-    $app->get('/install',function($request, $response, $args) {
-      $response->getBody()->write("Already installed. Try to navigate main url.");
-    } );
-  }
+$app->any('/publishtoken/{action}[/{id}]', PublishTokenController::class);
+$app->any('/package/{action}[/{id}]', PackageController::class);
+
+$configPath=$dm->resolvePath('web/ui/assets/settings.json');
+
+if(!file_exists($configPath))
+{
+	$container['dm']=$dm;
+	$app->get('/install',InstallerController::class );
+}
+else
+{
+	$app->get('/install',function($request, $response, $args)
+		{
+			$response->getBody()->write("Already installed. Try to navigate main url.");
+		} 
+	);
+}
 
 // Run app
 $app->run();
