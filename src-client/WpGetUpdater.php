@@ -65,12 +65,6 @@ class WpGetUpdater {
      */
     private $token;
 
-    /**
-     * wp info plugin data
-     *
-     * @var StdClass
-     */
-    private $plugin_info;
     
   
     
@@ -82,15 +76,16 @@ class WpGetUpdater {
         add_filter( "pre_set_site_transient_update_plugins", array( $this, "wpget_pre_set_site_transient_update_plugins" ) );
         add_filter( "plugins_api", array( $this, "wpget_plugins_api" ), 10, 3 );
 
-        // add_filter( "plugins_api_result", array( $this, "wpget_plugins_api_result"), 10,3); 
-        // add_filter( "plugins_api_args", array( $this, "wpget_plugins_api_args"), 10,2); 
         
-        // after updare
-        //add_filter( "upgrader_post_install", array( $this, "wpget_upgrader_post_install" ), 10, 3 );
         
         // message after upgrade
-        //add_action( 'in_plugin_update_message-' . $this->plugin_slug, array( $this, 'wpget_in_plugin_update_message' ) );
+        add_action( 'in_plugin_update_message-' . $this->plugin_basename, array( $this, 'wpget_in_plugin_update_message' ), 10, 2 );
 
+        // pre upgrade
+        add_filter( 'upgrader_pre_download', array($this,'wpget_upgrader_pre_download'), 10, 3 ); 
+        
+        // after upgrade
+        add_filter( "upgrader_post_install", array( $this, "wpget_upgrader_post_install" ), 10, 3 );
         
     }
     /**
@@ -112,8 +107,8 @@ class WpGetUpdater {
         $this->plugin_slug          = $path_parts['filename'];
 
         // repo vars
-        $this->token                = 'nGXLbWrR0HLLQHljYZ6mLeOv2ZOhVu';
-        $this->wpget_api_url        = WPGET_API_URL . 'Catalog/Package';
+        $this->token                = WPGET_TOKEN_READ;
+        $this->wpget_api_url        = WPGET_API_URL;
         $this->wpget_package_name   = WPGET_PACKAGE_NAME;
         $this->wpget_repo_slug      = WPGET_REPO_SLUG;
 
@@ -139,68 +134,65 @@ class WpGetUpdater {
         $this->plugin_file_data = get_file_data($abs_path, $default_headers, 'plugin');
 
     }
-
     
-
-    // function wpget_plugins_api_result($res, $action, $args )
-    // {
-    //     error_log("***************** FUNCTION: " .__FUNCTION__);
-    //     return $res;
-    // }
-
-    // function wpget_plugins_api_args($args, $action )
-    // {
-    //     error_log("***************** FUNCTION: " .__FUNCTION__);
-    //     return $args;
-    // }
-    
-    // function wpget_upgrader_post_install($response, $hook_extra, $result)
-    // {
-    //     //error_log("***************** FUNCTION: " .__FUNCTION__);
-    //     // Remember if our plugin was previously activated
-    //     $was_activated = is_plugin_active( PLUGIN_SLUG );
-
-    //     global $wp_filesystem;
-    //     $plugin_folder = WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . dirname( PLUGIN_SLUG );
-    //     $wp_filesystem->move( $result['destination'], $plugin_folder );
-    //     $result['destination'] = $plugin_folder;
-
-    //     // Re-activate plugin if needed
-    //     if ( $was_activated )
-    //     {
-    //         $activate = activate_plugin( PLUGIN_SLUG );
-    //     }
+    function wpget_upgrader_post_install($response, $hook_extra, $result)
+    {
+        // Remember if our plugin was previously activated
         
-    //     return $result;
+        $was_activated = is_plugin_active( $this->plugin_basename );
+         
+        // remove .wpget.yml file
+        if ( isset( $result['source_files'] ) && is_array( $result['source_files'] ) )
+        {
+            
+            foreach( $result['source_files'] as $index => $file)
+            {
+                if ( $file === '.wpget.yml' && file_exists( $f = path_join($result['destination'],$result['source_files'][$index]) ) )
+                {
+                    unlink( $f );
+                    break;
+                }
+            }
+            
+        }
+        
+        // TODO: if plugin have to be deactivate and reactivate by yml params 
+        // Re-activate plugin if needed
+        // if ( $was_activated )
+        // {
+        //     $activate = activate_plugin( $this->plugin_basename );
+        // }
+        
+        return $result;
 
-    // }
+    }
 
-    // function wpget_in_plugin_update_message()
-    // {
-    //     //error_log("***************** FUNCTION: " .__FUNCTION__);
-    //     //echo 'message after update';
-    // }
-    
-    public function get_remote_info( $version = '' )
+    function wpget_in_plugin_update_message($plugin_data,$response)
+    {
+        echo $response->upgrade_notice;
+    }
+   
+
+    private function get_remote_info( $version = '' )
     {
         $url = add_query_arg( array(
             'name'      => $this->wpget_package_name,
             'version'   => $version,
             'reposlug'  => $this->wpget_repo_slug
             ), 
-            $this->wpget_api_url
+            $this->wpget_api_url . 'Catalog/Package'
         );
 
         $args = array(
             'headers'     => array('Authorization' => 'Bearer ' . $this->token ),
         ); 
         $response = wp_remote_get( $url ,$args);
+
         if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 )
         {
             if ($response['response']['code'] == '200')
             {
-                $body = json_decode( $response['body'] );
-                
+                $body = json_decode( $response['body'] );                
                 return !empty($body) ? $body : null ;    
             }
             else
@@ -214,36 +206,35 @@ class WpGetUpdater {
     }
         
   
-    function transient_info()
+    private function transient_info($plugin_info)
     {
         $transient = new \stdClass();
 
         $transient->slug            = $this->plugin_slug;
         $transient->plugin          = $this->plugin_basename;
-        $transient->new_version     = $this->plugin_info->version;
-        $transient->url             = $this->plugin_info->url; // plugin url
-        $transient->package         = $this->plugin_info->package; // absolute path to file zip
+        $transient->new_version     = $plugin_info->version;
+        $transient->url             = $plugin_info->homepage; // plugin url
+        $transient->package         = $plugin_info->relativepath; // absolute path to file zip
 
         $transient->icons           = array(
-            '1x'            => 'https://ps.w.org/akismet/assets/icon-128x128.png?rev=969272',
-            '2x'            => 'https://ps.w.org/akismet/assets/icon-256x256.png?rev=969272',
-            'default'       => 'https://ps.w.org/akismet/assets/icon-256x256.png?rev=969272'
+            '1x'            => $plugin_info->icons_1x,
+            '2x'            => $plugin_info->icons_2x,
+            'default'       => $plugin_info->icons_default
         );
 
         $transient->banners         = array(
-            '1x'            => 'https://ps.w.org/akismet/assets/banner-772x250.jpg?rev=479904',
-            '2x'            => 'https://ps.w.org/akismet/assets/banner-772x250.jpg?rev=479904',
-            'default'       => 'https://ps.w.org/akismet/assets/banner-772x250.jpg?rev=479904',
-            'low'           => 'https://ps.w.org/akismet/assets/banner-772x250.jpg?rev=479904',
-            'high'          => 'https://ps.w.org/akismet/assets/banner-772x250.jpg?rev=479904',
+            'low'           => $plugin_info->banners_low,
+            'high'          => $plugin_info->banners_high,
             
         );
 
         $transient->banners_rtl     = array();
-        $transient->tested          = $this->plugin_info->tested;
+        $transient->tested          = $plugin_info->tested;
         $transient->compatibility   = new \stdClass();
 
+        $transient->upgrade_notice  = $plugin_info->upgrade_notice;
 
+        
         return $transient;
     }
 
@@ -257,61 +248,103 @@ class WpGetUpdater {
 
         // Get the remote version
         $remote_info = $this->get_remote_info();
-        error_log(print_r($remote_info,true));
         // If a newer version is available, add the update
         if ( $remote_info  &&  version_compare( $this->plugin_file_data['Version'], $remote_info->version, '<' ) )
-        {
-            
-            $this->plugin_info = $remote_info;
-            $transient->response[$this->plugin_basename] = $this->transient_info();;
-       
+        {            
+            $transient->response[$this->plugin_basename] = $this->transient_info($remote_info);
         }
 
         return $transient;
     }
 
-    /**
-     * Function called in plugin version information to display in the details lightbox
-     *
-     * @param [type] $false
-     * @param [type] $action
-     * @param [type] $response
-     * @return void
-     */
+    
+    // Function called in plugin version information to display in the details lightbox
     public function wpget_plugins_api( $false, $action, $response )
     {
         if ( empty( $response->slug ) || $response->slug != $this->plugin_slug )
         {
             return $false;
         }
-
-        $info = $this->transient_info();
+        // Get the remote version
+        $remote_info = $this->get_remote_info();
+        // If a newer version is available, add the update
+        if ( $remote_info  &&  version_compare( $this->plugin_file_data['Version'], $remote_info->version, '<' ) )
+        {   
+            $info = $this->transient_info($remote_info);
         
-        // add section
+            // add section
+            
+            $info->sections = array(
+                'description'       => $remote_info->description,
+                'installation'      => $remote_info->installation,
+                'faq'               => $remote_info->faq,
+                'changelog'         => $remote_info->changelog,
+                'old_version'       => $remote_info->old_version,
+            );
+
+            // other info
+            $info->name             = $this->plugin_file_data['Plugin Name'];
+            $info->upgrade_notice   = $remote_info->upgrade_notice;
+
+            $info->author           = $remote_info->author;
+            $info->author_profile   = $remote_info->author_profile;
+            $info->requires_php     = $remote_info->requires_php;
+
+
+            $info->requires         = $remote_info->requires;
+            $info->added            = $remote_info->added;
+            $info->homepage         = $remote_info->homepage;
         
-        $info->sections = array(
-            'description'       => 'The new version of the plugin',
-            'installation'      => 'This is another section',
-            'faq'               => 'FAQ',
-            'changelog'         => 'Some new features',
-            'previous_version'  => 'Previous Versionds'
-        );
+            return $info;
 
-        // other info
-        $info->name             = $this->plugin_file_data['Plugin Name'];
-        $info->upgrade_notice   = '<ul><li>[Improvement] New changes made in version 4.0 were causing problem at websites running on PHP version less than 5.0</li></ul>';
-
-        $info->author           = "Francesco Minà";
-        $info->author_profile   = "https://github.com/zeppaman/WpGet";
-        $info->requires_php     = '5.4';
-        $info->requires         = '4.0.0'; // wp version required
-        $info->added            = '2007-01-21';
-        $info->homepage         = 'https://github.com/zeppaman/WpGet';
-
-       
-        return $info;
+        }
+        return $false;
         
     }
+
+    // call before download file. 
+    // override for download file with token 
+    // $package : path to file
+    public function wpget_upgrader_pre_download( $false, $package, $instance )
+    { 
+
+        $url = add_query_arg( array(
+            'name'      => $this->wpget_package_name,
+            'version'   => '', // get latest version
+            'reposlug'  => $this->wpget_repo_slug
+            ), 
+            $this->wpget_api_url . 'Catalog/DownloadPackage'
+        );
+
+        $args = array(
+            'headers'     => array('Authorization' => 'Bearer ' . $this->token ),
+        );
+
+        $response = wp_remote_get( $url ,$args);
+        
+        if ( ! is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) === 200 )
+        {
+            // save file in temporary folder 
+            $zip = $response['body'];
+
+            
+            $newfilename = wp_unique_filename( get_temp_dir() , basename($package) );
+            $newfilename = get_temp_dir() . $newfilename;
+            $newfilename = wp_normalize_path($newfilename);
+
+            // Now use the standard PHP file functions
+            $fp = fopen($newfilename, "w");
+            fwrite($fp, $zip);
+            fclose($fp);
+
+            delete_site_transient( 'update_plugins' );
+
+            return $newfilename; 
+        }
+            
+    }
+
+    
 }
 
 new \WpGet\Updater\WpGetUpdater();

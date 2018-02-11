@@ -122,39 +122,40 @@ class PackageManager
             // TODO: make this load dinamically
             // TODO: sanitize by field type )
 
-            if(isset($manifest["name"])) $pk->name=trim($manifest["name"]);
+            if(isset($manifest["name"])) $pk->name = trim($manifest["name"]);
             if(isset($manifest["version"]))   
             {
                 $pk->setVersionFromString(trim($manifest["version"]));
             }
 
-            if(isset($manifest["added"])) $pk->added=trim($manifest["added"]);
-            if(isset($manifest["upgrade_notice"])) $pk->upgrade_notice=trim($manifest["upgrade_notice"]);
-            if(isset($manifest["tested"])) $pk->tested=trim($manifest["tested"]);
+            if(isset($manifest["added"])) $pk->added = trim($manifest["added"]);
+            if(isset($manifest["upgrade_notice"])) $pk->upgrade_notice = $manifest["upgrade_notice"];
+            if(isset($manifest["tested"])) $pk->tested = trim($manifest["tested"]);
 
-            if(isset($manifest["homepage"])) $pk->homepage=trim($manifest["homepage"]);
-            if(isset($manifest["author"])) $pk->author=trim($manifest["author"]);
-            if(isset($manifest["author_profile"])) $pk->author_profile=trim($manifest["author_profile"]);
+            if(isset($manifest["homepage"])) $pk->homepage = trim($manifest["homepage"]);
+            if(isset($manifest["author"])) $pk->author = trim($manifest["author"]);
+            if(isset($manifest["author_profile"])) $pk->author_profile = trim($manifest["author_profile"]);
 
-            if(isset($manifest["requires"])) $pk->requires=trim($manifest["requires"]);
-            if(isset($manifest["requires_php"])) $pk->requires_php=trim($manifest["requires_php"]);
+            if(isset($manifest["requires"])) $pk->requires = trim($manifest["requires"]);
+            if(isset($manifest["requires_php"])) $pk->requires_php = trim($manifest["requires_php"]);
 
+            
             // section 
 
-            if(isset($manifest["description"])) $pk->description=$manifest["description"];
-            if(isset($manifest["installation"])) $pk->installation=$manifest["installation"];
-            if(isset($manifest["faq"])) $pk->faq=$manifest["faq"];
-            if(isset($manifest["changelog"])) $pk->changelog=$manifest["changelog"];
-            if(isset($manifest["old_version"])) $pk->old_version=$manifest["old_version"];
+            if(isset($manifest["description"])) $pk->description = $manifest["description"];
+            if(isset($manifest["installation"])) $pk->installation = $manifest["installation"];
+            if(isset($manifest["faq"])) $pk->faq = $manifest["faq"];
+            if(isset($manifest["changelog"])) $pk->changelog = $manifest["changelog"];
+            if(isset($manifest["old_version"])) $pk->old_version = $manifest["old_version"];
 
             // banner
-            if(isset($manifest["banners_low"])) $pk->banners_low=trim($manifest["banners_low"]);
-            if(isset($manifest["banners_high"])) $pk->banners_high=trim($manifest["banners_high"]);
+            if(isset($manifest["banners_low"])) $pk->banners_low = trim($manifest["banners_low"]);
+            if(isset($manifest["banners_high"])) $pk->banners_high = trim($manifest["banners_high"]);
 
             // icons
-            if(isset($manifest["icons_1x"])) $pk->icons_1x=trim($manifest["icons_1x"]);
-            if(isset($manifest["icons_2x"])) $pk->icons_2x=trim($manifest["icons_2x"]);
-            if(isset($manifest["icons_default"])) $pk->icons_default=trim($manifest["icons_default"]);
+            if(isset($manifest["icons_1x"])) $pk->icons_1x = trim($manifest["icons_1x"]);
+            if(isset($manifest["icons_2x"])) $pk->icons_2x = trim($manifest["icons_2x"]);
+            if(isset($manifest["icons_default"])) $pk->icons_default = trim($manifest["icons_default"]);
 
             
             
