@@ -65,8 +65,23 @@ Any other needs or suggestion? [Please open a issue](https://github.com/zeppaman
 ## How to implement a WpGet compliant plugin
 This is easy. We have prepared a ready-to-use php updater class that interact with plugin repository to keep plugin updated. This needs only to setup some wordpress settings (repository url and access token). After that your plugin will check for newer version using WpGet and will download them using the private repository. Easy!
 
-For now, [just copy and paste this class into your plugin](https://raw.githubusercontent.com/zeppaman/WpGet/master/src-client/WpGetUpdater.php). In next future we are going to deliver this using a composer package and a public wordpress plugin.
+For now, [just copy and paste this class into your plugin](https://raw.githubusercontent.com/zeppaman/WpGet/master/src-client/WpGetUpdater.php). In next future we are going to deliver this using a composer package and a public wordpress plugin. After copying the file, and before including it in the plugin, some variables must be set. This can be done in the plugin itself or in another file, for example the wp-config.php file. The variable are:
+```php
+// repository config data
+define( 'WPGET_REPO_SLUG','test000' );
+define( 'WPGET_PACKAGE_NAME','my-plugin' );
+define( 'WPGET_API_URL','http://localhost:3000/web/' );
+define( 'WPGET_TOKEN_READ','FnrvNuzwKodEgIqxsBctbFc2SxMncM');
+
+// plugin info
+// plugin filename
+define( 'WPGET_PLUGIN_FILE', 'plugin-test.php' );
+// plugin directory
+define( 'WPGET_PLUGIN_DIR', 'plugin-test' );
+```
+
 An example of complete yaml file it can be found inside plugin zip file [here](https://github.com/zeppaman/WpGet/raw/master/example/plugin-test.zip)
+
 
 ```yaml
 version: 1.2.4 # versione in form major.minor.build
