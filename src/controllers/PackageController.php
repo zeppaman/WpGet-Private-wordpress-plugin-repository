@@ -72,7 +72,6 @@ use \WpGet\db\PackageTable as PackageTable;
              $uploadedFile=$files[0];
  
              
-             //TODO: OPEN PACKAGE AND READ METADATA
  
              $pk= new Package();
              $pk->name=$name;
