@@ -12,27 +12,29 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^4.4.6",
+    "@angular/animations": "^5.2.4",
     "@angular/cdk": "^2.0.0-beta.12",
-    "@angular/common": "^4.2.4",
-    "@angular/compiler": "^4.2.4",
-    "@angular/core": "^4.2.4",
-    "@angular/forms": "^4.2.4",
-    "@angular/http": "^4.2.4",
+    "@angular/common": "^5.2.4",
+    "@angular/compiler": "^5.2.4",
+    "@angular/compiler-cli": "^5.2.4",
+    "@angular/core": "^5.2.4",
+    "@angular/forms": "^5.2.4",
+    "@angular/http": "^5.2.4",
     "@angular/material": "^2.0.0-beta.12",
-    "@angular/platform-browser": "^4.2.4",
-    "@angular/platform-browser-dynamic": "^4.2.4",
-    "@angular/router": "^4.2.4",
+    "@angular/platform-browser": "^5.2.4",
+    "@angular/platform-browser-dynamic": "^5.2.4",
+    "@angular/platform-server": "^5.2.4",
+    "@angular/router": "^5.2.4",
     "angular2-fontawesome": "^0.9.3",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "ng2-slugify": "^0.1.0",
-    "primeng": "^4.3.0",
+    "primeng": "^5.2.0-rc.1",
     "rxjs": "^5.4.2",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
-    "@angular/cli": "1.4.9",
+    "@angular/cli": "1.6.8",
     "@angular/compiler-cli": "^4.2.4",
     "@angular/language-service": "^4.2.4",
     "@types/jasmine": "~2.5.53",
@@ -50,6 +52,6 @@
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
-    "typescript": "~2.3.3"
+    "typescript": "^2.4.2"
   }
 }

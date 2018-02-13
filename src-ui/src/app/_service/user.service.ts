@@ -28,6 +28,10 @@ export class UserService {
 
   save(item: any)  {
       console.log(item);
+      if(item.password == null || item.password.lenght==0)
+      {
+          item.password=null;
+      }
       return this.http.post(this.config.apiHost+'api/user/Item', item)
       .catch((err: Response) => {
           this.messageService.add({severity: 'error', 

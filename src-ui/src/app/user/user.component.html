@@ -13,13 +13,15 @@
 
 <p-dialog header="User Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
     <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="user">
-        <div class="ui-grid-row">
+        <div class="ui-grid-row" >
             <div class="ui-grid-col-4"><label for="username">Username</label></div>
             <div class="ui-grid-col-8"><input pInputText id="username" [(ngModel)]="user.username" /></div>
         </div>
-        <div class="ui-grid-row" *ngIf="user.isNew">
+        <div class="ui-grid-row" >
             <div class="ui-grid-col-4"><label for="password">Password</label></div>
-            <div class="ui-grid-col-8"><input pPassword id="password"  type="password" [(ngModel)]="user.password" /></div>
+            <div class="ui-grid-col-8"><input pPassword id="password"  type="password" [(ngModel)]="user.password" />
+                <br>* set password to change</div>
+            
         </div>
         
     </div>

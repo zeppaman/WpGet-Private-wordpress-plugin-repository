@@ -21,6 +21,20 @@ use WpGet\Controllers\ProtectedController;
      abstract  public function getModel();
      
   
+     function presave(&$entity,$data)
+     {
+        return;
+     }
+     function processInput(&$entity,&$data)
+     {
+        return;
+     }
+
+     function process(&$item)
+     {
+        return;
+     }
+
     function getAll($request, $response, $args) {   
         $this->authorize();
         $td=$this->getTableDefinition();
@@ -29,6 +43,11 @@ use WpGet\Controllers\ProtectedController;
         $columnNames=array_keys( $columns);
         $colString= implode(" ",$columnNames);
         $result=$model::all($columnNames);
+       
+        foreach($result as $item)
+        {
+            $this->process($item);
+        }
       
         return $response->getBody()->write($result->toJson());
     }
@@ -38,6 +57,7 @@ use WpGet\Controllers\ProtectedController;
         $model=$this->getModel();
         $id = $args['id'];
         $dev = $model::find($id);
+        $this->process($dev);
         $response->getBody()->write($dev->toJson());
         return $response;
     }
@@ -47,8 +67,10 @@ use WpGet\Controllers\ProtectedController;
     {
         $this->authorize();
 
+      
         $model=$this->getModel();
         $data = $request->getParsedBody();
+        $this-> processInput($dev,$data);
         $dev = new $model();
         //This should be managed by client as in REST standard, btw this may may help to simplify calls
         if(isset($data) && array_key_exists('id',$data))
@@ -58,6 +80,8 @@ use WpGet\Controllers\ProtectedController;
 
         $this->map($data,$dev);
 
+        $this-> presave($dev,$data);
+    
         $dev->save();
 
         return $response->withStatus(201)->getBody()->write($dev->toJson());
@@ -79,12 +103,13 @@ use WpGet\Controllers\ProtectedController;
         $this->authorize();
         $model=$this->getModel();
         $data = $request->getParsedBody();
+        $this-> processInput($dev,$data);
         $id = (\array_key_exists('id',$args))? $args['id']:$data["id"];
        
         $dev = $model::find($id);
 
         $this->map($data,$dev);
-
+        $this-> presave($dev,$data);
         $dev->save();
 
         return $response->getBody()->write($dev->toJson());

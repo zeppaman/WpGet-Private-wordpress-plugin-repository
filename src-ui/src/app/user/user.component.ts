@@ -66,6 +66,7 @@ delete() {
 
 onRowSelect(event) {
     this.newUser = false;
+    this.user = {isNew:false};
     this.user = this.cloneCar(event.data);
     this.displayDialog = true;
 }

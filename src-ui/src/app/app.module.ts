@@ -52,6 +52,7 @@ import { AuthInterceptor } from './_service/http.interceptor';
 import { HttpClientModule } from '@angular/common/http';
 import { MenubarModule } from 'primeng/components/menubar/menubar';
 import { PanelMenuModule } from 'primeng/components/panelmenu/panelmenu';
+import {CardModule} from 'primeng/card';
 
 export function configFactory(config:ConfigurationService) {
    return () => config.load();
@@ -103,7 +104,8 @@ export function baseHrefFactory (config: ConfigurationService)  {
     PanelModule,
     FileUploadModule,
     MenubarModule,
-    PanelMenuModule
+    PanelMenuModule,
+    CardModule
 
   ],
   providers: [AuthenticationService, 

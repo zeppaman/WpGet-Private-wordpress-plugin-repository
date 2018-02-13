@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {CardModule} from 'primeng/card';
 
 
 @Component({

@@ -56,6 +56,7 @@ class DependencyManager
         $um->addTable(new PackageTable());
         $um->run();
 
+        //create default user on first installation with default password
         $userCount=User::all()->count();
         if($userCount==0)
         {

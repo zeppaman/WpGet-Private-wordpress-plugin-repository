@@ -21,4 +21,47 @@ use \WpGet\db\UsersTable as UsersTable;
         // echo "getmodel";
          return '\WpGet\Models\User';
      }
+
+     function postItem($request, $response, $args) 
+     {
+         //check for duplicated users
+       
+       return parent::postItem($request, $response, $args);
+
+     }
+
+
+     function pushItem($request, $response, $args) 
+     {
+         //check for duplicated users
+
+       return parent::pushItem($request, $response, $args);
+
+     }
+
+     function processInput(&$entity,&$data)
+     {
+       
+        if(isset($data["password"]) && strlen($data["password"])>0)
+        {
+            $data["password"]=hash('sha512',$data["password"]);
+        }
+        else
+        {
+            unset($data["password"]);
+        }
+     }
+
+    //  function presave(&$entity,$data)
+    //  {
+    //      if(isset($data["password"]) && strlen($data["password"])>0)
+    //      {
+    //         $entity->password=hash('sha512',$data["password"]);
+    //      }
+    //  }
+
+     function process(&$item)
+     {
+        $item->password=null;
+     }
 }
