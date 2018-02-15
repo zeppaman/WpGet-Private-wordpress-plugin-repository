@@ -2,7 +2,6 @@ import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { RepositoryService } from '../_service/repository.service';
 import { PublishTokenService } from '../_service/publishtoken.service';
 import {Slug} from 'ng2-slugify';
-import {DropdownModule} from 'primeng/primeng';
 
 
 @Component({
@@ -35,7 +34,17 @@ export class PublishTokensComponent implements OnInit {
           this.loadRepos();
        }
 
-  
+   slugify(text:string)
+   {
+     if(text==null) return "";
+      return text.toLowerCase()
+      .replace(/\s+/g, '-')           // Replace spaces with -
+      .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+      .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+      .replace(/^-+/, '')             // Trim - from start of text
+      .replace(/-+$/, '');            // Trim - from end of text
+   }
+
     loadRepos()
     {
       this.repoService.getList().then(items => 
@@ -53,11 +62,11 @@ export class PublishTokensComponent implements OnInit {
     }
     nameChange(changes) {
       console.log(changes);
-     let  slug = new Slug('german');
+   
       if (this.item.isNew)
       {
-        console.log(slug.slugify(changes));
-        this.item.reposlug = slug.slugify(changes)
+        console.log(this.slugify(changes));
+        this.item.reposlug = this.slugify(changes)
       }
   
       if ( this.item.reposlug.length < 10)

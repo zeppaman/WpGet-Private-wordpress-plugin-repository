@@ -53,6 +53,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MenubarModule } from 'primeng/components/menubar/menubar';
 import { PanelMenuModule } from 'primeng/components/panelmenu/panelmenu';
 import {CardModule} from 'primeng/card';
+import {Slug} from 'ng2-slugify';
+import {Charmaps} from 'ng2-slugify/charmaps';
 
 export function configFactory(config:ConfigurationService) {
    return () => config.load();

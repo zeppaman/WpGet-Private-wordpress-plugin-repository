@@ -13,7 +13,17 @@ export class RepositoryService {
 
 
   constructor(private http: HttpClient, private messageService: MessageService, private config:ConfigurationService) { }
-
+  slugify(text:string)
+  {
+    if(text==null) return "";
+     return text.toLowerCase()
+     .replace(/\s+/g, '-')           // Replace spaces with -
+     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+     .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+     .replace(/^-+/, '')             // Trim - from start of text
+     .replace(/-+$/, '');            // Trim - from end of text
+  }
+  
   getList() {
     return this.http.get(this.config.apiHost+ 'api/repository/All')
     .map(res => {

@@ -1,6 +1,5 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { RepositoryService } from '../_service/repository.service';
-import {Slug} from 'ng2-slugify';
 
 @Component({
   selector: 'app-repository',
@@ -33,11 +32,10 @@ export class RepositoryComponent implements OnInit, OnChanges {
 
   nameChange(changes) {
     console.log(changes);
-   let  slug = new Slug('german');
-    if(this.item.isNew)
+   
     {
-      console.log(slug.slugify(changes));
-      this.item.reposlug=slug.slugify(changes)
+      console.log(this.itemService.slugify(changes));
+      this.item.reposlug=this.itemService.slugify(changes)
     }
 
     if( this.item.reposlug.length<10)
