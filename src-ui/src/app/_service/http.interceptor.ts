@@ -1,5 +1,6 @@
 
 import { Observable } from 'rxjs/Observable';
+
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -39,7 +40,7 @@ export class AuthInterceptor implements HttpInterceptor {
                 .catch((err, source) => {
                     if (err.status  == 401 || err.status  == 0) {
                         this.forceLogout();
-                           return Observable.empty();
+                           return new Observable();
                        } else {
                            return Observable.throw(err);
                    }  

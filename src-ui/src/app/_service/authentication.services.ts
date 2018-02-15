@@ -35,6 +35,14 @@ export class AuthenticationService
                     localStorage.setItem(environment.userKey, JSON.stringify(response.json()));                 
                  
                 }
+                else
+                {
+                    this.messageService.add({severity: 'error',
+                    summary: 'Login Error',
+                    detail: 'Error during login. Check password and username.'  });
+                  
+            
+                }
             })
             .catch((err:Response) => {
                 let details = err.json();

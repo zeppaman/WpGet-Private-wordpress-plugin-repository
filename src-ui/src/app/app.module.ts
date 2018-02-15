@@ -14,7 +14,6 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { AuthenticationService } from './_service/authentication.services';
 import { HttpModule } from '@angular/http';
-import { AlertService } from './_service/alert.service';
 import { FormsModule } from '@angular/forms';
 import { adminRouting } from './frame/frame-routing.module';
 import { appRouting } from './app-routing.module';
@@ -53,8 +52,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MenubarModule } from 'primeng/components/menubar/menubar';
 import { PanelMenuModule } from 'primeng/components/panelmenu/panelmenu';
 import {CardModule} from 'primeng/card';
-import {Slug} from 'ng2-slugify';
-import {Charmaps} from 'ng2-slugify/charmaps';
+
 
 export function configFactory(config:ConfigurationService) {
    return () => config.load();
@@ -110,8 +108,7 @@ export function baseHrefFactory (config: ConfigurationService)  {
     CardModule
 
   ],
-  providers: [AuthenticationService, 
-    AlertService,  
+  providers: [AuthenticationService,
     AuthGuard, 
     UserService, 
     MessageService, 

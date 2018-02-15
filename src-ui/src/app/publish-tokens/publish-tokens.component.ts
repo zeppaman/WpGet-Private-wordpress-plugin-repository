@@ -1,7 +1,6 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { RepositoryService } from '../_service/repository.service';
 import { PublishTokenService } from '../_service/publishtoken.service';
-import {Slug} from 'ng2-slugify';
 
 
 @Component({
@@ -34,16 +33,7 @@ export class PublishTokensComponent implements OnInit {
           this.loadRepos();
        }
 
-   slugify(text:string)
-   {
-     if(text==null) return "";
-      return text.toLowerCase()
-      .replace(/\s+/g, '-')           // Replace spaces with -
-      .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-      .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-      .replace(/^-+/, '')             // Trim - from start of text
-      .replace(/-+$/, '');            // Trim - from end of text
-   }
+ 
 
     loadRepos()
     {
@@ -65,8 +55,8 @@ export class PublishTokensComponent implements OnInit {
    
       if (this.item.isNew)
       {
-        console.log(this.slugify(changes));
-        this.item.reposlug = this.slugify(changes)
+        console.log(this.repoService.slugify(changes));
+        this.item.reposlug = this.repoService.slugify(changes)
       }
   
       if ( this.item.reposlug.length < 10)

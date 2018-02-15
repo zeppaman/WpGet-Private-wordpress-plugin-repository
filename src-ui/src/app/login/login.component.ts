@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../_service/authentication.services';
-import { AlertService } from '../_service/alert.service';
 import { NgModule }      from '@angular/core';
 import { ConfigurationService } from '../_service/configuration.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 
 @Component({
@@ -23,8 +23,9 @@ export class LoginComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService,
-      private alertService: AlertService, 
-      private config:ConfigurationService) { }
+  
+      private config: ConfigurationService,
+      private messageService: MessageService) { }
 
       cliks: number= 0;
 
@@ -51,8 +52,9 @@ export class LoginComponent implements OnInit {
                   this.router.navigate([this.returnUrl]);
               },
               error => {
-                  this.alertService.error(error);
-                  console.log("error");
+                  this.messageService.add({severity: 'error',
+                  summary: 'Login Error',
+                  detail: 'Error during login. Check password and username.'  });
                   this.loading = false;
               });
   }
