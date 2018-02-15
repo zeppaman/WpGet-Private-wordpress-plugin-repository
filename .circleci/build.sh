@@ -5,7 +5,7 @@ php -r "unlink('composer-setup.php');"
 php composer.phar self-update
 sudo mv composer.phar /usr/local/bin/composer
 composer install -n --prefer-dist
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 #angular build
