@@ -60,9 +60,12 @@ class DependencyManager
         $userCount=User::all()->count();
         if($userCount==0)
         {
+            $seed=rand(1000,20000);
+            $date=date();
             $u = new User();
             $u->username='admin';
             $u->password=hash('sha512','admin');
+            $u->token=hash('sha512',"admin $date $seed");
             $u->save();
         }
         
